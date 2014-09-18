@@ -10,17 +10,17 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     69574,       1823]
-NotebookOptionsPosition[     67753,       1766]
-NotebookOutlinePosition[     68125,       1782]
-CellTagsIndexPosition[     68082,       1779]
+NotebookDataLength[     71479,       1840]
+NotebookOptionsPosition[     69307,       1775]
+NotebookOutlinePosition[     69679,       1791]
+CellTagsIndexPosition[     69636,       1788]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
 Cell[TextData[{
  StyleBox["We compute the decoration vectors for cells lining the \
-rhombohedral edges. Based on model described in",
+rhombohedral edges. Based on the model described in",
   FontWeight->"Bold"],
  StyleBox[" Tetracoordinated quasicrystals",
   FontSlant->"Italic"],
@@ -30,7 +30,7 @@ rhombohedral edges. Based on model described in",
 }], "Text",
  CellChangeTimes->{{3.6198000845972805`*^9, 3.61980008912654*^9}, {
   3.6198001298398685`*^9, 3.619800130607912*^9}, {3.619800180343757*^9, 
-  3.6198002925751762`*^9}}],
+  3.6198002925751762`*^9}, {3.620038527611111*^9, 3.620038527882127*^9}}],
 
 Cell[TextData[StyleBox["First we clear all variables, import the TetGetLink \
 library used for displaying our 3D shapes, and define the golden ratio.\n\
@@ -52,11 +52,128 @@ Cell[BoxData[{
   RowBox[{"(*", 
    RowBox[{"golden", " ", "ratio"}], "*)"}]}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{"Clear", "[", "tau", "]"}], "\[IndentingNewLine]", 
-   "*)"}]}]}], "Input",
+  RowBox[{"(*", 
+   RowBox[{"Clear", "[", "tau", "]"}], "*)"}]}]}], "Input",
  CellChangeTimes->{{3.6195448276221476`*^9, 3.6195448484893413`*^9}, {
-  3.61980033058335*^9, 3.619800330784362*^9}}],
+  3.61980033058335*^9, 3.619800330784362*^9}, {3.6200384104934125`*^9, 
+  3.620038411836489*^9}}],
+
+Cell[TextData[StyleBox["These are the functions that we will use:\n\t\
+n(x1,x2,x3) returns the unit normal vector to the plane defined by the three \
+vectors (x1,x2,x3).\n\tp( . ) returns the point shared by three planes, each \
+of which is defined by a unit normal vector to the plane and a point lying on \
+the plane.\n\tsolveP( . )simplifies the notation somewhat for p( . )\n\t\
+mirror(a,{n,x0}) finds the mirror image of a point (denoted a) about a plane \
+specified by a unit normal vector (denoted n) and a point on the plane \
+(denoted x0).",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.6198874048266277`*^9, 3.6198874824500675`*^9}, 
+   3.6198890923751497`*^9, {3.6200382109089966`*^9, 3.620038286644329*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"n", "[", 
+    RowBox[{"{", 
+     RowBox[{"x1_", ",", "x2_", ",", "x3_"}], "}"}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Normalize", "[", 
+      RowBox[{"Cross", "[", 
+       RowBox[{
+        RowBox[{"x3", "-", "x1"}], ",", 
+        RowBox[{"x2", "-", "x1"}]}], "]"}], "]"}], ",", "x2"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"p", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"n1_", ",", "p1_"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"n2_", ",", "p2_"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"n3_", ",", "p3_"}], "}"}]}], "]"}], ":=", 
+   RowBox[{
+    RowBox[{"1", "/", 
+     RowBox[{"Det", "[", 
+      RowBox[{"{", 
+       RowBox[{"n1", ",", "n2", ",", "n3"}], "}"}], "]"}]}], "*", 
+    "\[IndentingNewLine]", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"p1", ".", "n1"}], ")"}], 
+       RowBox[{"Cross", "[", 
+        RowBox[{"n2", ",", "n3"}], "]"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"p2", ".", "n2"}], ")"}], 
+       RowBox[{"Cross", "[", 
+        RowBox[{"n3", ",", "n1"}], "]"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"p3", ".", "n3"}], ")"}], 
+       RowBox[{"Cross", "[", 
+        RowBox[{"n1", ",", "n2"}], "]"}]}]}], ")"}]}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"solveP", "[", 
+    RowBox[{"plane1_", ",", "plane2_", ",", "plane3_"}], "]"}], ":=", 
+   RowBox[{"p", "[", 
+    RowBox[{
+     RowBox[{"n", "[", 
+      RowBox[{"Part", "[", 
+       RowBox[{"plane1", ",", 
+        RowBox[{"1", ";;", "3"}]}], "]"}], "]"}], ",", 
+     RowBox[{"n", "[", 
+      RowBox[{"Part", "[", 
+       RowBox[{"plane2", ",", 
+        RowBox[{"1", ";;", "3"}]}], "]"}], "]"}], ",", 
+     RowBox[{"n", "[", 
+      RowBox[{"Part", "[", 
+       RowBox[{"plane3", ",", 
+        RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"mirror", "[", 
+    RowBox[{"a_", ",", 
+     RowBox[{"{", 
+      RowBox[{"n_", ",", "x0_"}], "}"}]}], "]"}], ":=", 
+   RowBox[{"a", "-", 
+    RowBox[{"2", 
+     RowBox[{"(", 
+      RowBox[{"a", "-", "x0", "-", 
+       RowBox[{
+        RowBox[{"Normalize", "[", 
+         RowBox[{"Cross", "[", 
+          RowBox[{
+           RowBox[{"Cross", "[", 
+            RowBox[{"n", ",", 
+             RowBox[{"a", "-", "x0"}]}], "]"}], ",", "n"}], "]"}], "]"}], 
+        RowBox[{"(", 
+         RowBox[{
+          RowBox[{"(", 
+           RowBox[{"a", "-", "x0"}], ")"}], ".", 
+          RowBox[{"Normalize", "[", 
+           RowBox[{"Cross", "[", 
+            RowBox[{
+             RowBox[{"Cross", "[", 
+              RowBox[{"n", ",", 
+               RowBox[{"a", "-", "x0"}]}], "]"}], ",", "n"}], "]"}], "]"}]}], 
+         ")"}]}]}], ")"}]}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.619883669947005*^9, 3.619883758694081*^9}, {
+  3.6198841248830256`*^9, 3.619884127651184*^9}, {3.619884163515235*^9, 
+  3.619884178130071*^9}, {3.6198843282276564`*^9, 3.619884385930957*^9}, {
+  3.619884640968544*^9, 3.6198846915204353`*^9}, {3.6198847896950507`*^9, 
+  3.6198848631432514`*^9}, {3.619889068354776*^9, 3.619889089201968*^9}, {
+  3.619891624024952*^9, 3.6198916472322793`*^9}, {3.619891783231058*^9, 
+  3.6198918044312706`*^9}, {3.6198921513081107`*^9, 3.619892184731023*^9}, {
+  3.61989221667785*^9, 3.6198922327147675`*^9}, {3.620038207078778*^9, 
+  3.6200382072877893`*^9}}],
 
 Cell[TextData[StyleBox["We define the dodecahedron parameters and the \
 vertices, with edge length normalized to 1.",
@@ -246,31 +363,13 @@ Cell[BoxData[{
       RowBox[{"-", "tau"}]}], "}"}], "*", "norm"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{
-   RowBox[{"dodecaPTS", "=", 
-    RowBox[{"{", 
-     RowBox[{
-     "d1", ",", "d2", ",", "d3", ",", "d4", ",", "d5", ",", "d6", ",", "d7", 
-      ",", "d8", ",", "d9", ",", "d10", ",", "d11", ",", "d12", ",", "d13", 
-      ",", "d14", ",", "d15", ",", "d16", ",", "d17", ",", "d18", ",", "d19", 
-      ",", "d20"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
-  RowBox[{"(*", 
-   RowBox[{"plot", " ", "dodecahedron"}], "*)"}]}], "\n", 
- RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Graphics3D", "[", 
-     RowBox[{"Point", "@", "dodecaPTS"}], "]"}], ";", "\[IndentingNewLine]", 
+  RowBox[{"dodecaPTS", "=", 
+   RowBox[{"{", 
     RowBox[{
-     RowBox[{"{", 
-      RowBox[{"pts", ",", "surface"}], "}"}], "=", 
-     RowBox[{"TetGenConvexHull", "[", "dodecaPTS", "]"}]}], ";", 
-    "\[IndentingNewLine]", 
-    RowBox[{"Graphics3D", "[", 
-     RowBox[{"GraphicsComplex", "[", 
-      RowBox[{"pts", ",", 
-       RowBox[{"Polygon", "[", "surface", "]"}]}], "]"}], "]"}], ";"}], 
-   "\[IndentingNewLine]", "*)"}]}]}], "Input",
+    "d1", ",", "d2", ",", "d3", ",", "d4", ",", "d5", ",", "d6", ",", "d7", 
+     ",", "d8", ",", "d9", ",", "d10", ",", "d11", ",", "d12", ",", "d13", 
+     ",", "d14", ",", "d15", ",", "d16", ",", "d17", ",", "d18", ",", "d19", 
+     ",", "d20"}], "}"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.619375376817961*^9, 3.619375513633787*^9}, {
    3.6193755547771397`*^9, 3.6193755873620033`*^9}, {3.619375690889925*^9, 
    3.619375691207943*^9}, {3.619375767346298*^9, 3.6193757920147095`*^9}, {
@@ -278,7 +377,8 @@ Cell[BoxData[{
    3.6193760012226753`*^9}, {3.6195426313785295`*^9, 3.619542634459706*^9}, {
    3.619542729538144*^9, 3.619542822862482*^9}, {3.619542876280537*^9, 
    3.6195428791887035`*^9}, 3.6195430260791054`*^9, {3.619800410773937*^9, 
-   3.619800429833027*^9}, 3.619881804077283*^9}],
+   3.619800429833027*^9}, 3.619881804077283*^9, {3.620038513301293*^9, 
+   3.6200385136293116`*^9}}],
 
 Cell[TextData[StyleBox["We define the standard barrelan parameters and the \
 vertices, with edge length (of top and bottom faces) normalized to 1.",
@@ -435,27 +535,13 @@ Cell[BoxData[{
     RowBox[{
     "b0", ",", "b1", ",", "b2", ",", "b3", ",", "b4", ",", "b5", ",", "b6", 
      ",", "b7", ",", "b8", ",", "b9", ",", "b10", ",", "b11", ",", "b12", ",",
-      "b13", ",", "b14"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Graphics3D", "[", 
-     RowBox[{"Point", "@", "barrelanPTS"}], "]"}], ";", "\[IndentingNewLine]", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"pts", ",", "surface"}], "}"}], "=", 
-     RowBox[{"TetGenConvexHull", "[", "barrelanPTS", "]"}]}], ";", 
-    "\[IndentingNewLine]", 
-    RowBox[{"Graphics3D", "[", 
-     RowBox[{"GraphicsComplex", "[", 
-      RowBox[{"pts", ",", 
-       RowBox[{"Polygon", "[", "surface", "]"}]}], "]"}], "]"}]}], 
-   "\[IndentingNewLine]", "*)"}]}]}], "Input",
+      "b13", ",", "b14"}], "}"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.619542642818184*^9, 3.619542657508024*^9}, 
    3.619542700727496*^9, {3.6195427805270605`*^9, 3.6195427833612223`*^9}, {
    3.6195428666169844`*^9, 3.6195430753979263`*^9}, {3.619543111943016*^9, 
    3.6195431137561197`*^9}, {3.6197802413008213`*^9, 
-   3.6197802563396816`*^9}, {3.6198818273856163`*^9, 3.619881835160061*^9}}],
+   3.6197802563396816`*^9}, {3.6198818273856163`*^9, 3.619881835160061*^9}, {
+   3.6200385105091333`*^9, 3.620038510852153*^9}}],
 
 Cell[TextData[StyleBox["We define the translation and rotation operators for \
 the dodecahedra and standard barrelan, that mostly are aligned along the \
@@ -804,88 +890,44 @@ Cell[TextData[StyleBox["We define the vertices of the modified barrelan.",
  FontWeight->"Bold"]], "Text",
  CellChangeTimes->{{3.6198826743760614`*^9, 3.6198826900579586`*^9}}],
 
-Cell[TextData[StyleBox["These are two functions that we will use. n(x1,x2,x3) \
-returns the unit normal vector to the plane defined by the three vectors \
-(x1,x2,x3). p( . ) returns the point shared by three planes, each of which is \
-defined by a unit normal vector to the plane and a point lying on the plane.",
+Cell[TextData[StyleBox["These are the five vertices of the bottom face of the \
+modified barrelan.",
  FontWeight->"Bold"]], "Text",
- CellChangeTimes->{{3.6198874048266277`*^9, 3.6198874824500675`*^9}, 
-   3.6198890923751497`*^9}],
+ CellChangeTimes->{{3.6199755705090637`*^9, 3.6199755957235055`*^9}, 
+   3.620040192094314*^9}],
 
-Cell[BoxData[{
+Cell[BoxData[
  RowBox[{
   RowBox[{
-   RowBox[{"n", "[", 
-    RowBox[{"{", 
-     RowBox[{"x1_", ",", "x2_", ",", "x3_"}], "}"}], "]"}], ":=", 
    RowBox[{"{", 
-    RowBox[{
-     RowBox[{"Normalize", "[", 
-      RowBox[{"Cross", "[", 
-       RowBox[{
-        RowBox[{"x3", "-", "x1"}], ",", 
-        RowBox[{"x2", "-", "x1"}]}], "]"}], "]"}], ",", "x2"}], "}"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"p", "[", 
-    RowBox[{
-     RowBox[{"{", 
-      RowBox[{"n1_", ",", "p1_"}], "}"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"n2_", ",", "p2_"}], "}"}], ",", 
-     RowBox[{"{", 
-      RowBox[{"n3_", ",", "p3_"}], "}"}]}], "]"}], ":=", 
+    RowBox[{"mb0", ",", "mb1", ",", "mb2", ",", "mb3", ",", "mb4"}], "}"}], 
+   "=", 
    RowBox[{
-    RowBox[{"1", "/", 
-     RowBox[{"Det", "[", 
-      RowBox[{"{", 
-       RowBox[{"n1", ",", "n2", ",", "n3"}], "}"}], "]"}]}], "*", 
-    "\[IndentingNewLine]", 
-    RowBox[{"(", 
-     RowBox[{
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"Table", "[", 
       RowBox[{
-       RowBox[{"(", 
-        RowBox[{"p1", ".", "n1"}], ")"}], 
-       RowBox[{"Cross", "[", 
-        RowBox[{"n2", ",", "n3"}], "]"}]}], "+", 
-      RowBox[{
-       RowBox[{"(", 
-        RowBox[{"p2", ".", "n2"}], ")"}], 
-       RowBox[{"Cross", "[", 
-        RowBox[{"n3", ",", "n1"}], "]"}]}], "+", 
-      RowBox[{
-       RowBox[{"(", 
-        RowBox[{"p3", ".", "n3"}], ")"}], 
-       RowBox[{"Cross", "[", 
-        RowBox[{"n1", ",", "n2"}], "]"}]}]}], ")"}]}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"solveP", "[", 
-    RowBox[{"plane1_", ",", "plane2_", ",", "plane3_"}], "]"}], ":=", 
-   RowBox[{"p", "[", 
-    RowBox[{
-     RowBox[{"n", "[", 
-      RowBox[{"Part", "[", 
-       RowBox[{"plane1", ",", 
-        RowBox[{"1", ";;", "3"}]}], "]"}], "]"}], ",", 
-     RowBox[{"n", "[", 
-      RowBox[{"Part", "[", 
-       RowBox[{"plane2", ",", 
-        RowBox[{"1", ";;", "3"}]}], "]"}], "]"}], ",", 
-     RowBox[{"n", "[", 
-      RowBox[{"Part", "[", 
-       RowBox[{"plane3", ",", 
-        RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}]}], ";"}]}], "Input",
- CellChangeTimes->{{3.619883669947005*^9, 3.619883758694081*^9}, {
-  3.6198841248830256`*^9, 3.619884127651184*^9}, {3.619884163515235*^9, 
-  3.619884178130071*^9}, {3.6198843282276564`*^9, 3.619884385930957*^9}, {
-  3.619884640968544*^9, 3.6198846915204353`*^9}, {3.6198847896950507`*^9, 
-  3.6198848631432514`*^9}, {3.619889068354776*^9, 3.619889089201968*^9}, {
-  3.619891624024952*^9, 3.6198916472322793`*^9}, {3.619891783231058*^9, 
-  3.6198918044312706`*^9}, {3.6198921513081107`*^9, 3.619892184731023*^9}, {
-  3.61989221667785*^9, 3.6198922327147675`*^9}}],
+       RowBox[{"R3", ".", 
+        RowBox[{"(", 
+         RowBox[{"T2", "+", 
+          RowBox[{"R1", ".", "x"}]}], ")"}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", 
+         RowBox[{"{", 
+          RowBox[{"d4", ",", "d5", ",", "d7", ",", "d15", ",", "d18"}], 
+          "}"}]}], "}"}]}], "]"}], "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{
+  3.619975598176646*^9, {3.619975904923191*^9, 3.619975961939452*^9}, {
+   3.61997599372227*^9, 3.619976110881971*^9}, {3.619976142001751*^9, 
+   3.6199761457539654`*^9}, {3.6199761820660424`*^9, 
+   3.6199761905855293`*^9}, {3.6199762222033377`*^9, 
+   3.6199763378879547`*^9}, {3.6200384683817234`*^9, 
+   3.6200384723729515`*^9}, {3.620040291375993*^9, 3.6200402960802617`*^9}}],
+
+Cell[TextData[StyleBox["We now define the planes (P0,...P4) that are used for \
+determining vertices in the central plane of the modified barrelan.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.6200401677349205`*^9, 3.620040205175062*^9}}],
 
 Cell[TextData[StyleBox["Plane 0 lies on one of the faces of barrelan 2 (B2).",
  FontWeight->"Bold"]], "Text",
@@ -912,56 +954,19 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"{", 
     RowBox[{"ptsP0", ",", "surfaceP0"}], "}"}], "=", 
-   RowBox[{"TetGenConvexHull", "[", "P0", "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{"Graphics3D", "[", 
-    RowBox[{"{", 
-     RowBox[{
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsP0", ",", 
-        RowBox[{"Polygon", "[", "surfaceP0", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD3", ",", 
-        RowBox[{"Polygon", "[", "surfaceD3", "]"}]}], "]"}]}], 
-     "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]", 
-   "*)"}]}]}], "Input",
+   RowBox[{"TetGenConvexHull", "[", "P0", "]"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.619889383982829*^9, 3.6198895345274396`*^9}, {
    3.6198896416705675`*^9, 3.6198896910623927`*^9}, {3.6198897238772697`*^9, 
    3.619889727574481*^9}, {3.619889758605256*^9, 3.619889781812584*^9}, {
    3.6198899084688277`*^9, 3.619889981218989*^9}, {3.619890467511803*^9, 
    3.619890501231732*^9}, 3.619890844292354*^9, {3.619890960628008*^9, 
-   3.619890977997001*^9}}],
+   3.619890977997001*^9}, {3.62003844542141*^9, 3.6200384456684246`*^9}}],
 
 Cell[TextData[StyleBox["Plane 1 lies on one of the faces of barrelan 1 (B1).",
  FontWeight->"Bold"]], "Text",
  CellChangeTimes->{{3.6198875599935026`*^9, 3.619887569474045*^9}}],
 
-Cell[BoxData[{
+Cell[BoxData[
  RowBox[{
   RowBox[{"P1", "=", 
    RowBox[{
@@ -976,46 +981,14 @@ Cell[BoxData[{
          RowBox[{"{", 
           RowBox[{"b3", ",", "b4", ",", "b9", ",", "b8"}], "}"}]}], "}"}]}], 
       "]"}], "]"}], "[", 
-    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{"Graphics3D", "[", 
-    RowBox[{"{", 
-     RowBox[{
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"Polygon", "[", "P1", "]"}], ",", "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD1", ",", 
-        RowBox[{"Polygon", "[", "surfaceD1", "]"}]}], "]"}]}], 
-     "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]", 
-   "*)"}]}]}], "Input",
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}]], "Input",
  CellChangeTimes->{{3.6198905262951655`*^9, 3.619890623000697*^9}, {
   3.6198909084680243`*^9, 3.6198909434180236`*^9}, {3.619890997709129*^9, 
   3.619891096355771*^9}, {3.6198912017567997`*^9, 3.6198912033548913`*^9}, {
   3.619891233499615*^9, 3.6198912355957355`*^9}, {3.6198912858026066`*^9, 
   3.6198912975142765`*^9}, {3.619891361161917*^9, 3.619891379407961*^9}, {
-  3.6198916685755005`*^9, 3.619891765639052*^9}}],
+  3.6198916685755005`*^9, 3.619891765639052*^9}, {3.6200384431502805`*^9, 
+  3.6200384434923*^9}}],
 
 Cell[TextData[StyleBox["Plane 2 lies on one of the faces of barrelan 2 (B2).",
  FontWeight->"Bold"]], "Text",
@@ -1041,52 +1014,16 @@ Cell[BoxData[{
   RowBox[{
    RowBox[{"{", 
     RowBox[{"ptsP2", ",", "surfaceP2"}], "}"}], "=", 
-   RowBox[{"TetGenConvexHull", "[", "P2", "]"}]}], 
-  ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{"Graphics3D", "[", 
-    RowBox[{"{", 
-     RowBox[{
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsP2", ",", 
-        RowBox[{"Polygon", "[", "surfaceP2", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD3", ",", 
-        RowBox[{"Polygon", "[", "surfaceD3", "]"}]}], "]"}], ","}], 
-     "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]", 
-   "*)"}]}]}], "Input",
- CellChangeTimes->{{3.6198906121750774`*^9, 3.6198906354614096`*^9}}],
+   RowBox[{"TetGenConvexHull", "[", "P2", "]"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6198906121750774`*^9, 3.6198906354614096`*^9}, {
+  3.6200384407101407`*^9, 3.620038441468184*^9}}],
 
 Cell[TextData[StyleBox["Plane 3 lies on one of the faces of barrelan 1 (B1).",
  FontWeight->"Bold"]], "Text",
  CellChangeTimes->{{3.619887585801979*^9, 3.619887596753605*^9}, {
   3.6198908914740524`*^9, 3.619890892090088*^9}}],
 
-Cell[BoxData[{
+Cell[BoxData[
  RowBox[{
   RowBox[{"P3", "=", 
    RowBox[{
@@ -1101,41 +1038,9 @@ Cell[BoxData[{
          RowBox[{"{", 
           RowBox[{"b1", ",", "b3", ",", "b8", ",", "b6"}], "}"}]}], "}"}]}], 
       "]"}], "]"}], "[", 
-    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{"Graphics3D", "[", 
-    RowBox[{"{", 
-     RowBox[{
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"Polygon", "[", "P3", "]"}], ",", "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD1", ",", 
-        RowBox[{"Polygon", "[", "surfaceD1", "]"}]}], "]"}]}], 
-     "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]", 
-   "*)"}]}]}], "Input",
- CellChangeTimes->{{3.619891389904561*^9, 3.619891477640579*^9}}],
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.619891389904561*^9, 3.619891477640579*^9}, {
+  3.6200384474135237`*^9, 3.6200384475815334`*^9}}],
 
 Cell[TextData[StyleBox["Plane 4 is defined using three of the vertices of \
 barrelan 2 (B2).",
@@ -1144,7 +1049,7 @@ barrelan 2 (B2).",
   3.619888967456005*^9, 3.619888967848027*^9}, {3.619890670507414*^9, 
   3.619890683644165*^9}}],
 
-Cell[BoxData[{
+Cell[BoxData[
  RowBox[{
   RowBox[{"P4", "=", 
    RowBox[{
@@ -1159,333 +1064,195 @@ Cell[BoxData[{
          RowBox[{"{", 
           RowBox[{"b0", ",", "b5", ",", "b10"}], "}"}]}], "}"}]}], "]"}], 
      "]"}], "[", 
-    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{"(*", "\[IndentingNewLine]", 
-   RowBox[{"Graphics3D", "[", 
-    RowBox[{"{", 
-     RowBox[{
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"Point", "[", "P4", "]"}], ",", "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD3", ",", 
-        RowBox[{"Polygon", "[", "surfaceD3", "]"}]}], "]"}]}], 
-     "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]", 
-   "*)"}]}]}], "Input",
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}]], "Input",
  CellChangeTimes->{{3.619890703589306*^9, 3.6198908120455093`*^9}, 
-   3.619891576638242*^9}],
+   3.619891576638242*^9, {3.6200384490136156`*^9, 3.6200384491486235`*^9}}],
 
-Cell[TextData[StyleBox["These are the five vertices of the modified barrelan \
-in its central plane.",
+Cell[TextData[StyleBox["We can now define the vertices of the modified \
+barrelan in its central plane. ",
  FontWeight->"Bold"]], "Text",
- CellChangeTimes->{{3.619974623663907*^9, 3.619974661029044*^9}, {
-  3.619975865711948*^9, 3.61997586644799*^9}}],
-
-Cell[CellGroupData[{
+ CellChangeTimes->{{3.6200401151539135`*^9, 3.6200401291107116`*^9}}],
 
 Cell[BoxData[{
  RowBox[{
-  RowBox[{"mb0", "=", 
+  RowBox[{"mb5", "=", 
    RowBox[{"solveP", "[", 
     RowBox[{"P0", ",", "P1", ",", "P3"}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"mb1", "=", 
+  RowBox[{"mb6", "=", 
    RowBox[{"solveP", "[", 
     RowBox[{"P0", ",", "P1", ",", "P4"}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
-  RowBox[{"mb2", "=", 
+  RowBox[{"mb7", "=", 
    RowBox[{"solveP", "[", 
     RowBox[{"P0", ",", "P2", ",", "P3"}], "]"}]}], 
   ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{
+   RowBox[{"{", 
+    RowBox[{"mb8", ",", "mb9"}], "}"}], "=", 
    RowBox[{
-    RowBox[{"{", 
-     RowBox[{"mb3", ",", "mb4"}], "}"}], "=", 
-    RowBox[{
-     RowBox[{"MatrixForm", "[", 
-      RowBox[{"Table", "[", 
-       RowBox[{
-        RowBox[{"R4", ".", 
-         RowBox[{"(", 
-          RowBox[{"T3", "+", "x"}], ")"}]}], ",", 
-        RowBox[{"{", 
-         RowBox[{"x", ",", 
-          RowBox[{"{", 
-           RowBox[{"b5", ",", "b7"}], "}"}]}], "}"}]}], "]"}], "]"}], "[", 
-     RowBox[{"[", "1", "]"}], "]"}]}], ";"}], 
-  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
- RowBox[{"Graphics3D", "[", 
-  RowBox[{"{", 
-   RowBox[{
-    RowBox[{"Arrow", "[", 
-     RowBox[{"{", 
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"Table", "[", 
       RowBox[{
+       RowBox[{"R4", ".", 
+        RowBox[{"(", 
+         RowBox[{"T3", "+", "x"}], ")"}]}], ",", 
        RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-    RowBox[{"Arrow", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-    RowBox[{"Arrow", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-    "\[IndentingNewLine]", 
-    RowBox[{"{", 
-     RowBox[{
-      RowBox[{"PointSize", "[", "Large", "]"}], ",", 
-      RowBox[{"Point", "[", 
-       RowBox[{"{", 
-        RowBox[{"mb0", ",", "mb1", ",", "mb2", ",", "mb3", ",", "mb4"}], 
-        "}"}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
-    RowBox[{"GraphicsComplex", "[", 
-     RowBox[{"ptsD3", ",", 
-      RowBox[{"Polygon", "[", "surfaceD3", "]"}]}], "]"}], ",", 
-    "\[IndentingNewLine]", 
-    RowBox[{"GraphicsComplex", "[", 
-     RowBox[{"ptsB2", ",", 
-      RowBox[{"Polygon", "[", "surfaceB2", "]"}]}], "]"}]}], 
-   "\[IndentingNewLine]", "}"}], "]"}]}], "Input",
+        RowBox[{"x", ",", 
+         RowBox[{"{", 
+          RowBox[{"b5", ",", "b7"}], "}"}]}], "}"}]}], "]"}], "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}]}], "Input",
  CellChangeTimes->{{3.6198915823455677`*^9, 3.6198915968463974`*^9}, {
   3.6198916571988497`*^9, 3.619891658566928*^9}, {3.619891769885295*^9, 
   3.619891776428669*^9}, {3.619891808421499*^9, 3.619891933959679*^9}, {
   3.6198920963819695`*^9, 3.619892115293051*^9}, {3.6198921904293485`*^9, 
   3.6198922007249374`*^9}, {3.6198922397571697`*^9, 3.619892256956154*^9}, {
   3.6199756761981087`*^9, 3.61997585980361*^9}, {3.619976345057365*^9, 
-  3.619976346664457*^9}}],
+  3.619976346664457*^9}, {3.620038459158196*^9, 3.6200384661805973`*^9}, {
+  3.6200402987524147`*^9, 3.6200403067248707`*^9}}],
+
+Cell[TextData[StyleBox["We now define the planes (P5, P6, P7) used for \
+determining vertices in the top plane of the modified barrelan.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.620039589061823*^9, 3.6200396267469783`*^9}, {
+  3.6200401454156446`*^9, 3.6200401507909517`*^9}, {3.6200402144625936`*^9, 
+  3.620040234055714*^9}}],
+
+Cell[TextData[StyleBox["Plane 5 is defined using two vertices of barrelan 1 \
+(B1) and one vertex of dodecahedron 2 (D2).",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.6200402350167694`*^9, 3.6200402364648523`*^9}}],
 
 Cell[BoxData[
- Graphics3DBox[{Arrow3DBox[{{0, 0, 0}, {0, 0, 11}}], 
-   Arrow3DBox[{{0, 0, 0}, {5, 0, 0}}], Arrow3DBox[{{0, 0, 0}, {0, 5, 0}}], 
-   {PointSize[Large], 
-    Point3DBox[{{2.125500605870017, 1.5442665834657288`, 
-     3.4391322234061823`}, {2.62726323507233, 0., 4.251001211740034}, {
-     0.8118689883338519, 2.498675819738226, 4.251001211740034}, {
-     1.4686847971019348`, 0., 5.767600076359663}, {0.4538485616846194, 
-     1.3968022466674206`, 5.767600076359663}}]}, 
-   GraphicsComplex3DBox[CompressedData["
-1:eJxTTMoPSmViYGAQAWJmIK5cXcyzkvWZ/X8wuG8fI9z7p3y2ogOa+H6YOG/w
-Qt5Tly7sX/Fl+uzyxy/tcYjD1T9jduPusHi9nwEKYOLbwrg7v134CDfnpvXf
-ra1bZdHF96OJ28PUW6dt/H7vvDy6+H6YONQ9cPUx1VO2lPhJoYvvh4k/Abvz
-tn3Ir9Nnd3/8AncPmvh+NPH9MPUwe9HE4e6BhOc3e1g4wMyBhg9cHOYeqHp4
-uKGa82w/PL5Q1MPF4f4CADmc/h8=
-    "], Polygon3DBox[{{16, 8, 17}, {17, 8, 12}, {10, 19, 20}, {11, 10, 20}, {
-     5, 18, 6}, {6, 14, 5}, {6, 7, 20}, {11, 17, 10}, {10, 17, 12}, {16, 17, 
-     9}, {9, 17, 13}, {13, 17, 11}, {9, 8, 16}, {19, 6, 20}, {2, 4, 1}, {12, 
-     14, 6}, {7, 15, 13}, {9, 1, 8}, {20, 7, 11}, {11, 7, 13}, {9, 4, 2}, {9, 
-     15, 4}, {2, 1, 9}, {12, 6, 10}, {10, 6, 19}, {4, 15, 5}, {4, 5, 3}, {6, 
-     18, 7}, {7, 18, 5}, {5, 15, 7}, {13, 15, 9}, {8, 14, 12}, {5, 14, 3}, {1,
-      3, 8}, {3, 14, 8}, {1, 4, 3}}]], GraphicsComplex3DBox[CompressedData["
-1:eJxTTMoPSmViYGDgB2JmIH7K7MbdYfHangEKjOvWnZ12VdiBL3gh76lLF+xX
-fJk+u/zxy/04xO1h4pWri3lWsj7bDzHlwX4c4nD1s75ZLdxd/x1u74kaxYOs
-QuIO+zILr93ivmvfvJwtwDfy234c4vYw8b1XLduuMH3ev+jXOb7X81/vxyEO
-V4/u39jqKVtK/KQw/ItD3B4mju5fHOJw9QCQ+Zyb
-    "], Polygon3DBox[{{3, 1, 8}, {8, 1, 6}, {6, 1, 7}, {7, 1, 2}, {7, 11, 
-     6}, {7, 12, 11}, {4, 5, 10}, {6, 11, 8}, {11, 13, 8}, {15, 13, 12}, {8, 
-     10, 3}, {10, 5, 3}, {12, 14, 15}, {2, 1, 3}, {12, 13, 11}, {15, 10, 
-     13}, {13, 10, 8}, {3, 5, 2}, {2, 5, 4}, {4, 9, 2}, {2, 9, 7}, {7, 9, 
-     12}, {12, 9, 14}, {10, 9, 4}, {15, 9, 10}, {14, 9, 15}}]]},
-  AutomaticImageSize->True,
-  ImageSize->{317.4932249737674, 447.84099987691604`},
-  ViewPoint->{0.14687716725526498`, 3.378553739493679, 0.1174807520079295},
-  ViewVertical->{-0.25756336422729004`, 0.9808205972779372, 
-   0.8077018369542323}]], "Output",
- CellChangeTimes->{3.619976347112482*^9}]
-}, Open  ]],
-
-Cell[TextData[StyleBox["These are the five vertices of the bottom face of the \
-modified barrelan",
- FontWeight->"Bold"]], "Text",
- CellChangeTimes->{{3.6199755705090637`*^9, 3.6199755957235055`*^9}}],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
  RowBox[{
-  RowBox[{
-   RowBox[{"{", 
-    RowBox[{"mb5", ",", "mb6", ",", "mb7", ",", "mb8", ",", "mb9"}], "}"}], 
-   "=", 
-   RowBox[{
-    RowBox[{"MatrixForm", "[", 
-     RowBox[{"Table", "[", 
-      RowBox[{
-       RowBox[{"R3", ".", 
-        RowBox[{"(", 
-         RowBox[{"T2", "+", 
-          RowBox[{"R1", ".", "x"}]}], ")"}]}], ",", 
-       RowBox[{"{", 
-        RowBox[{"x", ",", 
-         RowBox[{"{", 
-          RowBox[{"d4", ",", "d5", ",", "d7", ",", "d15", ",", "d18"}], 
-          "}"}]}], "}"}]}], "]"}], "]"}], "[", 
-    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{"Graphics3D", "[", 
-  RowBox[{"{", 
-   RowBox[{
-    RowBox[{"Arrow", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-    RowBox[{"Arrow", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-    RowBox[{"Arrow", "[", 
-     RowBox[{"{", 
-      RowBox[{
-       RowBox[{"{", 
-        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-    "\[IndentingNewLine]", 
-    RowBox[{"{", 
+  RowBox[{"P5", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
      RowBox[{
-      RowBox[{"PointSize", "[", "Large", "]"}], ",", 
-      RowBox[{"Point", "[", 
-       RowBox[{"{", 
-        RowBox[{"mb5", ",", "mb6", ",", "mb7", ",", "mb8", ",", "mb9"}], 
-        "}"}], "]"}]}], "}"}], ",", "\[IndentingNewLine]", 
-    RowBox[{"(*", 
-     RowBox[{
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsB2", ",", 
-        RowBox[{"Polygon", "[", "surfaceB2", "]"}]}], "]"}], ","}], "*)"}], 
-    "\[IndentingNewLine]", 
-    RowBox[{"GraphicsComplex", "[", 
-     RowBox[{"ptsD2", ",", 
-      RowBox[{"Polygon", "[", "surfaceD3", "]"}]}], "]"}]}], 
-   "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]"}], "Input",
- CellChangeTimes->{
-  3.619975598176646*^9, {3.619975904923191*^9, 3.619975961939452*^9}, {
-   3.61997599372227*^9, 3.619976110881971*^9}, {3.619976142001751*^9, 
-   3.6199761457539654`*^9}, {3.6199761820660424`*^9, 
-   3.6199761905855293`*^9}, {3.6199762222033377`*^9, 3.6199763378879547`*^9}}],
-
-Cell[BoxData[
- Graphics3DBox[{Arrow3DBox[{{0, 0, 0}, {0, 0, 11}}], 
-   Arrow3DBox[{{0, 0, 0}, {5, 0, 0}}], Arrow3DBox[{{0, 0, 0}, {0, 5, 0}}], 
-   {PointSize[Large], 
-    Point3DBox[{{0.2628655560595668, 0.8090169943749475, 4.958583081984715}, {
-     0.8506508083520401, 0., 4.958583081984715}, {1.1135163644116068`, 
-     0.8090169943749475, 3.5822011615135416`}, {0.42532540417601994`, 
-     1.3090169943749475`, 4.1079322736326755`}, {1.3763819204711736`, 0., 
-     4.1079322736326755`}}]}, GraphicsComplex3DBox[CompressedData["
-1:eJxTTMoPSmViYGAQAWJmIK5cXcyzkvXZ/v9gcH+/Ud26s9OuCjugidvDxHmD
-F/KeunTBfsWX6bPLH7/cj0Mcrv4Zsxt3h8VrewYogIlvC+Pu/HbhI9ycFWrK
-opEreNDF7dHE98PUb9vreqY1TwBd3B4mDnUPXP36pYFC5rdY0cXtYeJPwO68
-vT/k1+mzuz9+gbsHTdweTdweph5mL5o43D2Q8Py2HxYOMHOg4QMXh7kHqh4e
-bqjmPLOHxReqerg43F8A2nLytw==
-    "], Polygon3DBox[{{16, 8, 17}, {17, 8, 12}, {10, 19, 20}, {11, 10, 20}, {
-     5, 18, 6}, {6, 14, 5}, {6, 7, 20}, {11, 17, 10}, {10, 17, 12}, {16, 17, 
-     9}, {9, 17, 13}, {13, 17, 11}, {9, 8, 16}, {19, 6, 20}, {2, 4, 1}, {12, 
-     14, 6}, {7, 15, 13}, {9, 1, 8}, {20, 7, 11}, {11, 7, 13}, {9, 4, 2}, {9, 
-     15, 4}, {2, 1, 9}, {12, 6, 10}, {10, 6, 19}, {4, 15, 5}, {4, 5, 3}, {6, 
-     18, 7}, {7, 18, 5}, {5, 15, 7}, {13, 15, 9}, {8, 14, 12}, {5, 14, 3}, {1,
-      3, 8}, {3, 14, 8}, {1, 4, 3}}]]},
-  ImageSize->{642.1124996827255, 664.4444444444445},
-  ViewPoint->{0.11032295201473524`, 3.30322742141038, 0.7256152208307746},
-  ViewVertical->{-0.25883726319038924`, 0.7203796531718328, 
-   0.898207711893887}]], "Output",
- CellChangeTimes->{{3.6199762296347632`*^9, 3.6199763383149796`*^9}}]
-}, Open  ]],
-
-Cell[TextData[StyleBox["Function for finding the mirror image of a point \
-(denoted a) about a plane specified by a unit normal vector (denoted n) and a \
-point on the plane (denoted x0).",
- FontWeight->"Bold"]], "Text",
- CellChangeTimes->{{3.619974804341241*^9, 3.6199748547281227`*^9}}],
-
-Cell[CellGroupData[{
-
-Cell[BoxData[{
- RowBox[{
-  RowBox[{
-   RowBox[{"mirror", "[", 
-    RowBox[{"a_", ",", 
-     RowBox[{"{", 
-      RowBox[{"n_", ",", "x0_"}], "}"}]}], "]"}], ":=", 
-   RowBox[{"a", "-", 
-    RowBox[{"2", 
-     RowBox[{"(", 
-      RowBox[{"a", "-", "x0", "-", 
-       RowBox[{
-        RowBox[{"Normalize", "[", 
-         RowBox[{"Cross", "[", 
-          RowBox[{
-           RowBox[{"Cross", "[", 
-            RowBox[{"n", ",", 
-             RowBox[{"a", "-", "x0"}]}], "]"}], ",", "n"}], "]"}], "]"}], 
-        RowBox[{"(", 
-         RowBox[{
+      RowBox[{"MatrixForm", "[", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"R2", ".", 
           RowBox[{"(", 
-           RowBox[{"a", "-", "x0"}], ")"}], ".", 
-          RowBox[{"Normalize", "[", 
-           RowBox[{"Cross", "[", 
-            RowBox[{
-             RowBox[{"Cross", "[", 
-              RowBox[{"n", ",", 
-               RowBox[{"a", "-", "x0"}]}], "]"}], ",", "n"}], "]"}], "]"}]}], 
-         ")"}]}]}], ")"}]}]}]}], ";"}], "\[IndentingNewLine]", 
- RowBox[{
-  RowBox[{
-   RowBox[{"{", 
-    RowBox[{"mb10", ",", "mb11", ",", "mb12", ",", "mb13", ",", "mb14"}], 
-    "}"}], "=", 
-   RowBox[{
-    RowBox[{"MatrixForm", "[", 
-     RowBox[{"Table", "[", 
-      RowBox[{
-       RowBox[{"mirror", "[", 
-        RowBox[{"x", ",", 
-         RowBox[{"n", "[", 
-          RowBox[{"Part", "[", 
-           RowBox[{"P0", ",", 
-            RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}], ",", 
-       RowBox[{"{", 
-        RowBox[{"x", ",", 
+           RowBox[{"T1", "+", "x"}], ")"}]}], ",", 
          RowBox[{"{", 
-          RowBox[{"mb5", ",", "mb6", ",", "mb7", ",", "mb8", ",", "mb9"}], 
-          "}"}]}], "}"}]}], "]"}], "]"}], "[", 
-    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+          RowBox[{"x", ",", 
+           RowBox[{"{", 
+            RowBox[{"b8", ",", "b13"}], "}"}]}], "}"}]}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}], ",", " ", 
+     RowBox[{
+      RowBox[{"MatrixForm", "[", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"R3", ".", 
+          RowBox[{"(", 
+           RowBox[{"T2", "+", 
+            RowBox[{"R1", ".", "x"}]}], ")"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"{", "d7", "}"}]}], "}"}]}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.620039591604968*^9, 3.6200395916999736`*^9}, {
+   3.620039646493108*^9, 3.6200396477241783`*^9}, {3.620039731626977*^9, 
+   3.620039734739155*^9}, {3.6200397647718725`*^9, 3.620040018452382*^9}, 
+   3.6200410375006685`*^9, {3.620050482983667*^9, 3.62005049370328*^9}, {
+   3.6200505324954987`*^9, 3.6200505566458797`*^9}, {3.620051255657861*^9, 
+   3.6200512803602743`*^9}}],
+
+Cell[TextData[StyleBox["Plane 6 (top plane of modified barrelan) is defined \
+by mirroring bottom plane. We also define in the process two vertices of \
+modified barrelan in top plane.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.620040024764744*^9, 3.6200400569515843`*^9}, {
+  3.6200509455441236`*^9, 3.6200509800640984`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"P6", "=", 
+   RowBox[{
+    RowBox[{"{", 
+     RowBox[{"mb10", ",", "mb11", ",", "mbtop3"}], "}"}], "=", 
+    RowBox[{
+     RowBox[{"MatrixForm", "[", 
+      RowBox[{"Table", "[", 
+       RowBox[{
+        RowBox[{"mirror", "[", 
+         RowBox[{"x", ",", 
+          RowBox[{"n", "[", 
+           RowBox[{"Part", "[", 
+            RowBox[{"P0", ",", 
+             RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"x", ",", 
+          RowBox[{"{", 
+           RowBox[{"mb0", ",", "mb1", ",", "mb3"}], "}"}]}], "}"}]}], "]"}], 
+      "]"}], "[", 
+     RowBox[{"[", "1", "]"}], "]"}]}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6200402526497774`*^9, 3.6200402801193485`*^9}, {
+   3.6200403152553587`*^9, 3.620040372568637*^9}, {3.620040405128499*^9, 
+   3.6200404066635866`*^9}, {3.6200404402645087`*^9, 
+   3.6200404833819747`*^9}, {3.620040648413414*^9, 3.620040649317466*^9}, {
+   3.6200410407458544`*^9, 3.620041048354289*^9}, 3.62005098970665*^9}],
+
+Cell[TextData[StyleBox["Plane 7 is defined using an edge on the bottom half \
+of the modified barrelan (MB) and an edge of dodecahedron 2 ( D2).",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.620040497406777*^9, 3.6200405173829193`*^9}}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"P7", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+     RowBox[{"{", 
+      RowBox[{"mb4", ",", "mb6"}], "}"}], ",", 
+     RowBox[{
+      RowBox[{"MatrixForm", "[", 
+       RowBox[{"Table", "[", 
+        RowBox[{
+         RowBox[{"R3", ".", 
+          RowBox[{"(", 
+           RowBox[{"T2", "+", 
+            RowBox[{"R1", ".", "x"}]}], ")"}]}], ",", 
+         RowBox[{"{", 
+          RowBox[{"x", ",", 
+           RowBox[{"{", "d6", "}"}]}], "}"}]}], "]"}], "]"}], "[", 
+      RowBox[{"[", "1", "]"}], "]"}]}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6200405200240707`*^9, 3.6200406445491934`*^9}, {
+  3.6200410545946465`*^9, 3.6200410576268196`*^9}}],
+
+Cell[TextData[StyleBox["We can now define the remaining vertices of the \
+modified barrelan in its top plane.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.620040682150344*^9, 3.620040686843612*^9}, {
+  3.620040774242611*^9, 3.620040782931108*^9}, {3.620050957784824*^9, 
+  3.620050961400031*^9}}],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"mb12", "=", 
+   RowBox[{"solveP", "[", 
+    RowBox[{"P1", ",", "P6", ",", "P7"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mb13", "=", 
+   RowBox[{"solveP", "[", 
+    RowBox[{"P1", ",", "P5", ",", "P6"}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mb14", "=", 
+   RowBox[{"mirror", "[", 
+    RowBox[{"mb12", ",", 
+     RowBox[{"n", "[", 
+      RowBox[{"Part", "[", 
+       RowBox[{"P5", ",", 
+        RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}]}], 
+  ";"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"MB1", "=", 
    RowBox[{"{", 
@@ -1550,22 +1317,20 @@ Cell[BoxData[{
      RowBox[{"ptsMB1", ",", 
       RowBox[{"Polygon", "[", "surfaceMB1", "]"}]}], "]"}]}], 
    "\[IndentingNewLine]", "}"}], "]"}]}], "Input",
- CellChangeTimes->{{3.6199677543431277`*^9, 3.6199678048120146`*^9}, {
-  3.619967884044546*^9, 3.619967890891938*^9}, {3.619974872625147*^9, 
-  3.6199750613759427`*^9}, {3.619975110703764*^9, 3.6199751340871015`*^9}, {
-  3.6199752152077413`*^9, 3.619975336927703*^9}, {3.61997537043962*^9, 
-  3.6199754312781*^9}, {3.61997636717563*^9, 3.6199766620704975`*^9}, {
-  3.6199768435338764`*^9, 3.6199768519333563`*^9}}],
+ CellChangeTimes->{{3.6200388856975927`*^9, 3.620038898745339*^9}, {
+   3.6200390247525463`*^9, 3.620039099383815*^9}, {3.6200393527833085`*^9, 
+   3.620039354951432*^9}, {3.6200395209429264`*^9, 3.6200395214699564`*^9}, {
+   3.6200406977902384`*^9, 3.6200408439896*^9}, {3.620040985212678*^9, 
+   3.6200410265240407`*^9}, {3.6200499107629375`*^9, 3.620049916954292*^9}, {
+   3.6200500258965225`*^9, 3.620050177368187*^9}, {3.62005022392785*^9, 
+   3.620050224006854*^9}, 3.620050260766957*^9, {3.6200504228412266`*^9, 
+   3.6200504648956327`*^9}, {3.6200505880706778`*^9, 3.620050595312092*^9}, {
+   3.620050872445943*^9, 3.620050899174472*^9}, {3.6200509883675733`*^9, 
+   3.62005104443578*^9}}],
 
 Cell[BoxData[
  Graphics3DBox[{Arrow3DBox[{{0, 0, 0}, {0, 0, 11}}], 
    Arrow3DBox[{{0, 0, 0}, {5, 0, 0}}], Arrow3DBox[{{0, 0, 0}, {0, 5, 0}}], 
-   {PointSize[Large], 
-    Point3DBox[{{2.125500605870017, 1.5442665834657288`, 
-     3.4391322234061823`}, {2.62726323507233, 0., 4.251001211740034}, {
-     0.8118689883338519, 2.498675819738226, 4.251001211740034}, {
-     1.4686847971019348`, 0., 5.767600076359663}, {0.4538485616846194, 
-     1.3968022466674206`, 5.767600076359663}}]}, 
    {PointSize[Large], 
     Point3DBox[{{0.2628655560595668, 0.8090169943749475, 4.958583081984715}, {
      0.8506508083520401, 0., 4.958583081984715}, {1.1135163644116068`, 
@@ -1573,163 +1338,406 @@ Cell[BoxData[
      1.3090169943749475`, 4.1079322736326755`}, {1.3763819204711736`, 0., 
      4.1079322736326755`}}]}, 
    {PointSize[Large], 
+    Point3DBox[{{2.125500605870017, 1.5442665834657288`, 
+     3.4391322234061823`}, {2.62726323507233, 0., 4.251001211740034}, {
+     0.8118689883338519, 2.498675819738226, 4.251001211740034}, {
+     1.4686847971019348`, 0., 5.767600076359663}, {0.4538485616846194, 
+     1.3968022466674206`, 5.767600076359663}}]}, 
+   {PointSize[Large], 
     Point3DBox[{{1.4336859493095042`, 1.6596678027269878`, 
      5.853010272984632}, {2.021471201601978, 0.8506508083520401, 
-     5.853010272984632}, {2.474548060920575, 1.7978644038519977`, 
-     4.62193685811453}, {1.7137028478844518`, 2.245077999351956, 
-     5.092165059948508}, {2.664759364179604, 0.9360610049770095, 
-     5.09216505994851}}]}, GraphicsComplex3DBox[CompressedData["
-1:eJxTTMoPSmViYGDgB2JmIFbaoVfGxsjocHR5y4OArT/szxkGHgxv5nYI/+wy
-bRELqwMDFEDUCTrc+mmw5sqvl/Yuyzv2e/5ldoCJz/pmtXB3/Xd7mPoTNYoH
-WYXEHfZlFl67xX3Xvnk5W4Bv5Dd7mDhv8ELeU5cu2K/4Mn12+eOX9kZ1685O
-uyrs8IzZjbvD4jXcHJj4tjDuzm8XPsLVr1BTFo1cwePwBKz+tn3Ir9Nnd3/8
-Yr9tr+uZ1jwBh8rVxTwrWb/BzYGJf/edsDbhwzd7jz95l//3/rJ/V53WVp0p
-7jCl9qn4T20GuP0w8fOuE27dP83skPFXqJz3yB/7GbLsLHdrhBzOz8leG5z9
-276gxrHk9VdGByuHypaEOBGHJY/bonMDWR0U/uaamn15a28DFQcAlWWZdw==
+     5.853010272984632}, {2.9768654414991023`, 0.8580096696138908, 
+     4.816669464280509}, {2.6637735374809255`, 1.9353447599551743`, 
+     4.310076121976679}, {1.7359176987212468`, 2.566027707022844, 
+     4.8166694642805075`}}]}, GraphicsComplex3DBox[CompressedData["
+1:eJxTTMoPSmViYGDgB2JmIOYNXsh76tIF+xVfps8uf/zS3qhu3dlpV4UdnjG7
+cXdYvLZngAKY+LYw7s5vFz7C1a9QUxaNXMHj8ASs/rZ9yK/TZ3d//GK/ba/r
+mdY8AYfK1cU8K1m/wc2BiSvt0CtjY2R0OLq85UHA1h/25wwDD4Y3czuEf3aZ
+toiF1QGmHqJO0OHWT4M1V369tHdZ3rHf8y+zA0x81jerhbvrv8PNP1GjeJBV
+SNxhX2bhtVvcd+2bl7MF+EZ+s4eJf/edsDbhwzd7jz95l//3/rJ/V53WVp0p
+7jCl9qn4T20GuL9h4inL5K7Mu8Du8GnalY0XSl7bC75gYnB1EXbwKpJuyPBn
+deB9qC6o8/2fveESnxkttoIOKx5xLA489tueI+JSh2U7iwM/VD0AGAqWlg==
 
-    "], Polygon3DBox[{{4, 6, 5}, {4, 7, 6}, {11, 3, 14}, {11, 5, 3}, {2, 10, 
-     4}, {4, 12, 2}, {12, 15, 2}, {14, 3, 13}, {13, 3, 1}, {2, 13, 1}, {2, 15,
-      13}, {11, 13, 12}, {13, 15, 12}, {11, 14, 13}, {4, 5, 11}, {11, 12, 
-     4}, {5, 6, 3}, {3, 6, 9}, {10, 7, 4}, {7, 8, 6}, {10, 8, 7}, {9, 8, 3}, {
-     3, 8, 1}, {6, 8, 9}, {1, 8, 2}, {2, 8, 10}}]]},
+    "], Polygon3DBox[{{6, 8, 3}, {3, 8, 4}, {4, 8, 1}, {1, 8, 10}, {7, 14, 
+     6}, {13, 14, 7}, {12, 11, 13}, {13, 15, 14}, {13, 11, 15}, {14, 15, 6}, {
+     6, 3, 7}, {3, 5, 7}, {15, 8, 6}, {2, 3, 1}, {2, 5, 3}, {3, 4, 1}, {11, 
+     10, 15}, {10, 8, 15}, {10, 9, 1}, {1, 9, 2}, {7, 9, 13}, {13, 9, 12}, {
+     12, 9, 11}, {11, 9, 10}, {2, 9, 5}, {5, 9, 7}}]]},
   AutomaticImageSize->True,
-  ImageSize->{312.42935177112065`, 459.18461302000395`},
-  ViewPoint->{0.05961477610404324, 3.383250977535587, -0.0076747296082188},
-  ViewVertical->{0.6027728246379609, 1.0842542456089168`, 
-   0.8258551356715566}]], "Output",
- CellChangeTimes->{{3.6199752812975216`*^9, 3.6199753372657223`*^9}, {
-   3.6199753764399633`*^9, 3.6199754316821227`*^9}, 3.6199757487972608`*^9, {
-   3.6199763675796533`*^9, 3.6199763707538347`*^9}, {3.6199764117391787`*^9, 
-   3.6199764254939656`*^9}, {3.6199764678283873`*^9, 
-   3.6199764764928827`*^9}, {3.6199765283428483`*^9, 
-   3.6199765437497296`*^9}, {3.619976639165187*^9, 3.6199766625025215`*^9}, 
-   3.619976852198372*^9}]
+  ImageSize->{241.51954042540189`, 415.9104814049758},
+  ViewPoint->{3.3366056983421246`, 0.5317893941409274, 0.185101199537143},
+  ViewVertical->{1.22473911086305, -0.04634952889780882, 
+   0.8304466874651036}]], "Output",
+ CellChangeTimes->{3.6200512878477025`*^9}]
 }, Open  ]],
 
-Cell[BoxData[""], "Input",
- CellChangeTimes->{{3.6199751383233433`*^9, 3.619975150023013*^9}, {
-  3.6199752603113213`*^9, 3.6199752718769827`*^9}}],
+Cell[TextData[StyleBox["This defines one quarter of the PR face, which we \
+shall refer to as PRface1. ",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.620038728138581*^9, 3.620038773041149*^9}, {
+   3.620051411100752*^9, 3.620051413740903*^9}, {3.6200517467149477`*^9, 
+   3.6200517637709236`*^9}, 3.620051799066942*^9}],
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"PRedge1", "=", 
+   RowBox[{"Join", "[", 
+    RowBox[{
+    "D1", ",", "D2", ",", "D3", ",", "B1", ",", "B2", ",", "B3", ",", "MB1"}],
+     "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.6200517657220354`*^9, 3.620051793187606*^9}, {
+  3.620051866106777*^9, 3.620051866970826*^9}}],
+
+Cell[TextData[StyleBox["We now define the planes about which we will reflect \
+the existing vertices, and define the other edges.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.620051800165005*^9, 3.620051801661091*^9}, {
+  3.620052078471924*^9, 3.6200520818401165`*^9}}],
 
 Cell[CellGroupData[{
 
-Cell[BoxData[
- RowBox[{"\[IndentingNewLine]", 
-  RowBox[{
-   RowBox[{"Graphics3D", "[", 
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"mirrorP0", "=", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"R1", ".", "x"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", 
+         RowBox[{"{", 
+          RowBox[{"d1", ",", "d2", ",", "d19"}], "}"}]}], "}"}]}], "]"}], 
+     "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"mirrorP1", "=", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"T4", "+", 
+        RowBox[{"R6", ".", "R5", ".", 
+         RowBox[{"(", 
+          RowBox[{"T1", "+", "x"}], ")"}]}]}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", 
+         RowBox[{"{", 
+          RowBox[{"b4", ",", "b9", ",", "b14"}], "}"}]}], "}"}]}], "]"}], 
+     "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PRedge2", "=", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"mirror", "[", 
+        RowBox[{"x", ",", 
+         RowBox[{"n", "[", 
+          RowBox[{"Part", "[", 
+           RowBox[{"mirrorP0", ",", 
+            RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "PRedge1"}], "}"}]}], "]"}], "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PRedge3", "=", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"mirror", "[", 
+        RowBox[{"x", ",", 
+         RowBox[{"n", "[", 
+          RowBox[{"Part", "[", 
+           RowBox[{"mirrorP1", ",", 
+            RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "PRedge1"}], "}"}]}], "]"}], "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PRedge4", "=", 
+   RowBox[{
+    RowBox[{"MatrixForm", "[", 
+     RowBox[{"Table", "[", 
+      RowBox[{
+       RowBox[{"mirror", "[", 
+        RowBox[{"x", ",", 
+         RowBox[{"n", "[", 
+          RowBox[{"Part", "[", 
+           RowBox[{"mirrorP1", ",", 
+            RowBox[{"1", ";;", "3"}]}], "]"}], "]"}]}], "]"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "PRedge2"}], "}"}]}], "]"}], "]"}], "[", 
+    RowBox[{"[", "1", "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"PRvertices", " ", "=", " ", 
+   RowBox[{"DeleteDuplicates", "[", 
+    RowBox[{"Join", "[", 
+     RowBox[{"PRedge1", ",", "PRedge2", ",", "PRedge3", ",", "PRedge4"}], 
+     "]"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"Graphics3D", "[", 
+  RowBox[{"{", 
+   RowBox[{
+    RowBox[{"Arrow", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
+    RowBox[{"Arrow", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+    RowBox[{"Arrow", "[", 
+     RowBox[{"{", 
+      RowBox[{
+       RowBox[{"{", 
+        RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+       RowBox[{"{", 
+        RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+    "\[IndentingNewLine]", 
     RowBox[{"{", 
      RowBox[{
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      RowBox[{"Arrow", "[", 
-       RowBox[{"{", 
-        RowBox[{
-         RowBox[{"{", 
-          RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD1", ",", 
-        RowBox[{"Polygon", "[", "surfaceD1", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsB1", ",", 
-        RowBox[{"Polygon", "[", "surfaceB1", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD2", ",", 
-        RowBox[{"Polygon", "[", "surfaceD2", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsB2", ",", 
-        RowBox[{"Polygon", "[", "surfaceB2", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsD3", ",", 
-        RowBox[{"Polygon", "[", "surfaceD3", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsB3", ",", 
-        RowBox[{"Polygon", "[", "surfaceB3", "]"}]}], "]"}], ",", 
-      "\[IndentingNewLine]", 
-      RowBox[{"GraphicsComplex", "[", 
-       RowBox[{"ptsMB1", ",", 
-        RowBox[{"Polygon", "[", "surfaceMB1", "]"}]}], "]"}]}], 
-     "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]"}]}]], "Input",
- CellChangeTimes->{{3.6199768763367524`*^9, 3.6199768869163575`*^9}}],
+      RowBox[{"PointSize", "[", "Large", "]"}], ",", 
+      RowBox[{"Point", "[", "PRvertices", "]"}]}], "}"}]}], 
+   "\[IndentingNewLine]", "}"}], "]"}]}], "Input",
+ CellChangeTimes->{{3.6200514149059696`*^9, 3.6200515903680058`*^9}, {
+  3.6200516224638414`*^9, 3.6200517189243584`*^9}, {3.6200520858103433`*^9, 
+  3.6200521100987325`*^9}, {3.620052145618764*^9, 3.6200521494669843`*^9}}],
 
 Cell[BoxData[
  Graphics3DBox[{Arrow3DBox[{{0, 0, 0}, {0, 0, 11}}], 
    Arrow3DBox[{{0, 0, 0}, {5, 0, 0}}], Arrow3DBox[{{0, 0, 0}, {0, 5, 0}}], 
-   GraphicsComplex3DBox[CompressedData["
+   {PointSize[Large], Point3DBox[CompressedData["
+1:eJx1mXl0TlcXxt9EEikRkYgxMoipZWmLVvFyjyJFUUMatIagtUxN29SXUkMR
+UwkNYmhMrzGCVqghmptepYOvprcSpVEVUf1I1JgljfGz4nmudXd680/W+mU7
+59x99tnnOY+I4e/3fdfT4XBs9XA4Kjz+PXHbR37p3n9pj8p+zmt7Yyp/dsd9
+UxPcIK/Sb12Vn0+6jS3Fy1d+fPGKZsPN+L8qRFWe+0qR4cAPOX6b4/DfC24I
+rol4TXDGm38X6zQEN+f7s2ydZ7Xou0eOZd0s1vwwr+CG4IaI1wRnPPJ5R2Me
+/DEO8qOJ/BiIN0Q898UQ+2UIbtjxFlO/OrbsVJCS45DL/NhwM16un1zuy5ZG
+kcEDt/hJrgn+tH6yuxydFRcguUYu623Hpj6BrfO8JdfI5b5wXrmPgpv7znll
+nZDL/eI4sv65HlkP1nGenjtr/NNzascHBS24//HKiHLjkMv82HAzXq6fXO7L
+b+0e7Jm1p165fRTc3Pd2I3eW/HEirFydkMt6GzQpZff4XnXK1Se53BfOK/dR
+cHPfOa+sE3K5XxxH1j/XI+vBOs7Tc2eNf3pOyS/Z9E9/mz7sb9OHWQ9PRskv
+1+fBzfjUO23XZX1aYs5bqc/pmF0HH2rfjv7w17zK54zENJ/ePQfe0Wy4QZ59
+qs3sXM/b2vq7x/2L1hZpNtyMl9/LOpffa8PLnRd+rw034y+JfWyJPuYv6s2G
+ay1FX+X4NtyMR57NeQ9PjvjOO7CmQj415tOGa+TIp8F82nAzXn7vYNSb/F4b
+rg0WdcvvteFm/J+WeV066/wTm/NVCfOmiT7AOt0K3hbn6y+bPvCFJc8Z+k/I
+g16WnwqK88a1/SC9+GaIykSeZyDPjK+MOp0JntMyzDOzWzj28X/amMB9Y9dV
+91QcZ/GUSzVLmzrURXz335NGzp40uqaKOdlz5bZYLzMfY5wn5iS566jinslf
+xt64o0Xdj8t5tOCuGV+c9sXAvlGe6jXwIyMT/3upMEQ1/aS0mfuzUi1y6r4r
+j6I8FMepn9k8wcfDQ/2QNjO/955/tOMv9vmuf2Jl1f9252XrvbzN730SV03l
+lb6wPffuFa1z2lyj24MKirwE6+mKea9hPSn4LvY/8nc2h+aucVdUt5bl7nSP
+L9KqXfZ0dOkcpLrH15026o3H9/OFxtWalTzUXtzYY8XM9tXUlgLfDX1+vKf5
+Djg5t80cL1UV8fuwv9uxvwGog33ivggEn2Spn0zdF30hQNTt17if8HctHePs
+Aae+24h4zodxjK3WeG0//h3XWQtxHA91azjAr4p7xwvrIH8T9w55vqjn6hiH
+nPHVrXrSYJ1b+zzvo0wd69Tk/ZWJdU8R99Q3NnpyF/i07JGdMv4JVOTNqp5X
+uetKNfIijEPecfCug427PN5/5CfJt2Ok39oKSoG7kM954NW6nom41zpA8bv6
+Dk7f/G1ORfXswcypJZu8FffFFaFv3HDYSzUGz8A45N+4iz0GZQQo7kumio53
+FxZq5KgH7QB4cHr7B0Mne5nrvL9RTWi+6LrJuU5yry9PfTescWVF/fD9cq/2
+a+bfNnkM9vEw+Iq9Rw/0PG9y49ql4+vnZnso8r6Ivwo+7b0Oh+IX+iMPB3TV
+f/a5UdmntQk5NzvsX+ZjnuvLGzqcOjz5nFbnzgjDOcHXjC8Y6dq0db6v+uJy
+7r1ewR7mfsVHH+p49p0HWqqVa+Tt084X+HUOVffAU+KKZlx5KVC1A+c45JMq
+poxYWhKmeC5eGORdYefqKiZnPslj/Ft7DpsRbq5zTMXVnz4c9Yx6GNV0+Mzk
+ELUJ43ww+8jk31M9ledrT/g2jDMNfE3Ix+FNE+qY8y7Fesg5L3nYIP+wOlVr
+mvHjMG84OOvqA/DkX1apEydqqwHYl5ex/oXg2C+jObj/Yu9X81+uZ+57PMbx
+A2c8v7f3h5eNqJBaZp0vwTqvR7Wa+rdHDXN/mbcet/YfHFUYCu5yTkYeBusH
+164/WEuVYL/Ggw8F534xXt6/7IN7bfqw1O3sw9mW+zRDz4AupL77DPfm97hf
+yWdB5xwAz4I+3Cp0I7kLOscXXNZ/Puq/hs05rWFzrln/XtAtCah/nhfqHJ4L
+a1/6Xu+FvvSq6G/J6GOdwZnPxeAz0Cc5fiv0ScE18mtl9UDu0r2GhoXkNKiq
+5g1e2XTbySA1Hflc4ZU48vcLFdV8cOpG8tiyeqihNiCfKwKPNH3Q6R9tCPhK
+5D8J/KaoQ9Z/A+s5MqaKc8T7Nw6cdcjvTUAdDrNy7RPwG5Z5XTrrv6/lvLj0
+5TgvnDddnOtU9IHNzD/iea5jxLm+bslzpu6DPD873vO3URuCzXPX/L0hCQPi
+g1US8kzdmIo8t6xbGJS6q7aaC/4c4u+dfLZn7JJaahx0ox/GX991622PftXU
+OdzPc77M2PHL19WU90dDXnr7vSB1FdwnrvbOgjrBKmfwzJTmsYGKurG7T+nZ
+Gy2qqj6hfy/VfgpW3cC9Ed8pJ3DvxfBg1RC6cTbGp248BN3ohm7sZ9GNmTr1
+IXUldWMM4rieHpi3B9bD76LumId5Y6Ebr9noxsrQjS2hG30S3321RUc/5Qfd
+mFdjQuSItCpmXfH8Rsxb0z3At0G5eiOPRJ0kox6GFvY9siKrockPo57JrfWf
+ry961GzcD4cbmfdLJsY5MfTC1Z6TmygXOPqPcRzcgfuLOjMc6yGHbjHIp1jv
+TY3zkmNe43Nw3i+8p4Zh/eSdce+Qy/pPxjjkvRFP3sty77h15tN6j7udzFu0
+5Zw6HMwDdYUv9ot508C5X+Sr0IcRbwQFbVxSXCXS5NQt5LXR55mfU7uuB457
+K0LVBN+NfJJb75F858bVwfFaz3BTNyazn19NbuETEGFy9nPyJtCf7P9XM1Kr
+z1jSwOScl7yTuC+2FLZrFdLtKWedkKdCH1JnPhoWFp3ljjR1I/fdMfwJ9xG6
+dEo7v9tHT0YoqUvJQy26Md/Z4WBObqeZDVWQ5b57/E5/FHyqa0xDoUsdDu1s
+//jOYeEqEfdXAPZrzLw5Xy9ZWl9NB+c5Nbl4d9A3+BT8uvDH+P5ifvjezwI/
+gHzmgf/H8g7Kd9I34HuR+0ifk+851g8534+cl+sk53knx7vKjOe85IwnL7Dx
+Mf4AjxV+5u/W96M5fjH4AOFnFtj4P5OEDjxjmbfIzNvbyAP2ReM+Mj+J4OeF
+/8y+6hL99pblnnU7o6Z9dGvBc43VQque0dJH+3VxD2xo8gXQOeTDoFvod/1a
+6ZL7zOj6agT4Xugc8k5Cj/F8TbT2AZ19gLqR/TkXfUPoSY2cepL1z76UatWT
+Zr/6xqKf8530kXygcyfie+k7Uf9OF36UAZ28GN+7eXFUwo42kSpL+LHkCZZ9
+dztZV7tFfbJ+dtv4+fANtHyx7xNt6sT67nA58yz+fPn65HnZJM4R/Qz6gewP
+Vn+vwPk+8rnG4gde1n+Ev+eHfFK/nUQ+d+NdQt+P8fTx6KeOhf9G3+9P4Y/R
+x4sSPt5d+GxdhO/35D0VZPp4z5StL1Q1gP7CfulPdFjdcnossiwuwpyXPt7P
+mDca68f51kZh/a2yE78KeLmqugs9dt5jSuvaqrZKn9Bp+oazAaaPZ3Rpufa3
+qLoqJd+ppvxQSdHHm/XHoU3bM+qZ73fqovrQCa9b9EOeLnUO+yT1xlTwHajD
+heDsJyk2+u044mPBXcIfoK5YDb5W6LRF0D/sw9RdS8D7C10kdVes0F3tEB/7
+r3qywNSTVr10Ued6OkAX8Rxx/fRhLuDcyXj2H33sL6N/+qqWyc/hns0GXy30
+6rfgzNsq5M0Af8PqVzjJ+f5ahnFSY65tf/GFUBUKTl9uFfhk7O863oPN2o49
+ExyiJoBv43kHZ11RjyXNb9p/3ZHwcrqanD4M9c9KzFtJ+DNcTxL2tzvi22De
+xVafx1zPm8K/Wo1xulvqPN/J9dy27PsZvR3GGY53CvUt40eAX8F+zQd/G9wT
+9ZAgfB6OQ/+nFHmj/iR/AE79SZ+tt2X9Z/Q4+kViX/geTwDfw/cLeH3hA7yD
+93iolRujwFmHrJMlwsfbi/hF4EnCl2uCeVOs7xqjGTj3/S3EjxG+XC/E06+4
+Zdmvwzr9vX6W+nfr9BOs76ALeizGaS3eO8uFj8r9SgZnnW8X/VO+E/n+2l9y
+InrDTs6b6zwDnTOua2ZccHQ9NQf3F/VPHPjn0BWnwIdCL9F/Ow1OfZUBXUH+
+KOrfz90Dm3Mq3+msZ2s+M3X2pVWiL7GP0c9hPWeJ/sa+tx+8lZWbfa+R8HPo
+z7SAb8P/h20C/jw4fEuNfGXO+x/61A9XS5EfcpeVm/F9RP18jn3nd+n43nmi
+/jeKc9EG33VD+PAvgfvhexlvvV+O6qw3q892VG+EOndZ70fTN2Ofp59Gf9vq
+j+XpjfG9RcK3vD/kid/VHPmk7mL8HOj8JOFbSt/sLsbxgj92GnrGA37XOvhO
+9M3od9Efox6rgPhj8K9eB+8F/ypL6DFf6LH6Fj2W6XRDjy0q801rmXrsGPgb
+mJf+mCfm9cT6C7FO8legxwqhxy5Aj6VBj9Efy4YeCytdOODQouqmP8b4/wPn
+55lo
+     "]]}},
+  AutomaticImageSize->True,
+  ImageSize->{394.8550980323702, 431.7389574263007},
+  ViewPoint->{-0.04275363968505399, 3.3425164475520317`, 0.5251246748514348},
+  ViewVertical->{-0.5173082131169197, 0.9775235842990162, 
+   0.7976745132697042}]], "Output",
+ CellChangeTimes->{3.620052110440752*^9, 3.62005215009602*^9}]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"Graphics3D", "[", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Arrow", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "11"}], "}"}]}], "}"}], "]"}], ",", 
+     RowBox[{"Arrow", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"5", ",", "0", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+     RowBox[{"Arrow", "[", 
+      RowBox[{"{", 
+       RowBox[{
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "0"}], "}"}], ",", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "5", ",", "0"}], "}"}]}], "}"}], "]"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"Red", ",", " ", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"ptsD1", ",", 
+         RowBox[{"Polygon", "[", "surfaceD1", "]"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"Green", ",", " ", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"ptsB1", ",", 
+         RowBox[{"Polygon", "[", "surfaceB1", "]"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"Red", ",", " ", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"ptsD2", ",", 
+         RowBox[{"Polygon", "[", "surfaceD2", "]"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"Green", ",", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"ptsB2", ",", 
+         RowBox[{"Polygon", "[", "surfaceB2", "]"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"Red", ",", " ", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"ptsD3", ",", 
+         RowBox[{"Polygon", "[", "surfaceD3", "]"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"Green", ",", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"ptsB3", ",", 
+         RowBox[{"Polygon", "[", "surfaceB3", "]"}]}], "]"}]}], "}"}], ",", 
+     "\[IndentingNewLine]", 
+     RowBox[{"{", 
+      RowBox[{"Blue", ",", " ", 
+       RowBox[{"GraphicsComplex", "[", 
+        RowBox[{"ptsMB1", ",", 
+         RowBox[{"Polygon", "[", "surfaceMB1", "]"}]}], "]"}]}], "}"}]}], 
+    "\[IndentingNewLine]", "}"}], "]"}], "\[IndentingNewLine]"}]], "Input",
+ CellChangeTimes->{{3.6199768763367524`*^9, 3.6199768869163575`*^9}, {
+  3.620038627987852*^9, 3.6200386323571024`*^9}, {3.6200513199145365`*^9, 
+  3.6200513930017166`*^9}}],
+
+Cell[BoxData[
+ Graphics3DBox[{Arrow3DBox[{{0, 0, 0}, {0, 0, 11}}], 
+   Arrow3DBox[{{0, 0, 0}, {5, 0, 0}}], Arrow3DBox[{{0, 0, 0}, {0, 5, 0}}], 
+   {RGBColor[1, 0, 0], GraphicsComplex3DBox[CompressedData["
 1:eJxTTMoPSmViYGAQAWJmIK5cXcyzkvWZ/X8wuG+/LYy789uFj/Zo4vth4rzB
 C3lPXbqwf8WX6bPLH7+0xyEOV/+M2Y27w+L1fgYogIlDabg5MP1o4vvRxO3R
 1NujicPUw+XR3LkfTRxu3xOwO2/bh/w6fXb3xy/2PFB70cT3o4nvR1NvjyYO
 Uw8Nz2/2sHDgg5oDDR97tPDZD1W/H009LF72o8XXfjRxuL8AvHQJig==
-    "], Polygon3DBox[{{16, 17, 9}, {9, 17, 11}, {11, 10, 20}, {13, 9, 11}, {6,
-      7, 20}, {6, 18, 7}, {11, 17, 10}, {10, 8, 12}, {16, 8, 17}, {17, 8, 
-     10}, {13, 4, 9}, {9, 4, 2}, {2, 4, 1}, {4, 15, 7}, {10, 19, 20}, {9, 8, 
-     16}, {9, 1, 8}, {2, 1, 9}, {1, 3, 8}, {8, 3, 12}, {20, 7, 11}, {7, 15, 
-     11}, {13, 15, 4}, {5, 6, 3}, {5, 18, 6}, {4, 7, 5}, {7, 18, 5}, {11, 15, 
-     13}, {4, 5, 3}, {12, 14, 10}, {6, 14, 3}, {19, 6, 20}, {10, 6, 19}, {10, 
-     14, 6}, {3, 14, 12}, {1, 4, 3}}]], GraphicsComplex3DBox[CompressedData["
+     "], Polygon3DBox[{{16, 17, 9}, {9, 17, 11}, {11, 10, 20}, {13, 9, 11}, {
+      6, 7, 20}, {6, 18, 7}, {11, 17, 10}, {10, 8, 12}, {16, 8, 17}, {17, 8, 
+      10}, {13, 4, 9}, {9, 4, 2}, {2, 4, 1}, {4, 15, 7}, {10, 19, 20}, {9, 8, 
+      16}, {9, 1, 8}, {2, 1, 9}, {1, 3, 8}, {8, 3, 12}, {20, 7, 11}, {7, 15, 
+      11}, {13, 15, 4}, {5, 6, 3}, {5, 18, 6}, {4, 7, 5}, {7, 18, 5}, {11, 15,
+       13}, {4, 5, 3}, {12, 14, 10}, {6, 14, 3}, {19, 6, 20}, {10, 6, 19}, {
+      10, 14, 6}, {3, 14, 12}, {1, 4, 3}}]]}, 
+   {RGBColor[0, 1, 0], GraphicsComplex3DBox[CompressedData["
 1:eJxTTMoPSmViYGDgB2JmIH7K7MbdYfF6PwMUbAvj7vx24aM9X/BC3lOXLuxf
 8WX67PLHL+1xiO+HiVeuLuZZyfrMHmLKA3sc4nD1s75ZLdxd/x1uL1fg9bBN
 h/7Z78ssvHaL++7+5uVsAb6R3+xxiO+Hie+9atl2hemz/aJf5/hez39tj0Mc
 rh7dv+uXBgqZ32J1QPcvDvH9MHF0/+IQh6sHAEK5qMU=
-    "], Polygon3DBox[{{10, 4, 5}, {2, 3, 5}, {12, 11, 7}, {7, 11, 6}, {1, 8, 
-     3}, {6, 8, 1}, {8, 11, 13}, {6, 11, 8}, {9, 4, 10}, {10, 15, 9}, {9, 15, 
-     14}, {4, 2, 5}, {15, 12, 14}, {1, 3, 2}, {13, 12, 15}, {2, 7, 1}, {1, 7, 
-     6}, {14, 12, 9}, {12, 7, 9}, {9, 2, 4}, {9, 7, 2}, {10, 13, 15}, {10, 8, 
-     13}, {5, 3, 10}, {3, 8, 10}, {13, 11, 12}}]], 
-   GraphicsComplex3DBox[CompressedData["
+     "], Polygon3DBox[{{10, 4, 5}, {2, 3, 5}, {12, 11, 7}, {7, 11, 6}, {1, 8, 
+      3}, {6, 8, 1}, {8, 11, 13}, {6, 11, 8}, {9, 4, 10}, {10, 15, 9}, {9, 15,
+       14}, {4, 2, 5}, {15, 12, 14}, {1, 3, 2}, {13, 12, 15}, {2, 7, 1}, {1, 
+      7, 6}, {14, 12, 9}, {12, 7, 9}, {9, 2, 4}, {9, 7, 2}, {10, 13, 15}, {10,
+       8, 13}, {5, 3, 10}, {3, 8, 10}, {13, 11, 12}}]]}, 
+   {RGBColor[1, 0, 0], GraphicsComplex3DBox[CompressedData["
 1:eJxTTMoPSmViYGAQAWJmIK5cXcyzkvXZ/v9gcH+/Ud26s9OuCjugidvDxHmD
 F/KeunTBfsWX6bPLH7/cj0Mcrv4Zsxt3h8VrewYogIlvC+Pu/HbhI9ycFWrK
 opEreNDF7dHE98PUb9vreqY1TwBd3B4mDnUPXP36pYFC5rdY0cXtYeJPwO68
 vT/k1+mzuz9+gbsHTdweTdweph5mL5o43D2Q8Py2HxYOMHOg4QMXh7kHqh4e
 bqjmPLOHxReqerg43F8A2nLytw==
-    "], Polygon3DBox[{{14, 18, 6}, {5, 3, 4}, {14, 8, 3}, {3, 8, 1}, {19, 10, 
-     6}, {6, 10, 12}, {4, 3, 1}, {14, 3, 5}, {5, 18, 14}, {5, 4, 15}, {15, 18,
-      5}, {7, 18, 15}, {16, 8, 12}, {1, 2, 4}, {6, 12, 14}, {6, 18, 7}, {7, 
-     20, 6}, {6, 20, 19}, {17, 13, 16}, {17, 11, 13}, {13, 11, 7}, {7, 11, 
-     20}, {15, 13, 7}, {16, 12, 17}, {12, 10, 17}, {12, 8, 14}, {13, 9, 16}, {
-     15, 9, 13}, {2, 9, 4}, {4, 9, 15}, {1, 9, 2}, {16, 9, 8}, {8, 9, 1}, {17,
-      10, 11}, {20, 10, 19}, {11, 10, 20}}]], 
-   GraphicsComplex3DBox[CompressedData["
+     "], Polygon3DBox[{{14, 18, 6}, {5, 3, 4}, {14, 8, 3}, {3, 8, 1}, {19, 10,
+       6}, {6, 10, 12}, {4, 3, 1}, {14, 3, 5}, {5, 18, 14}, {5, 4, 15}, {15, 
+      18, 5}, {7, 18, 15}, {16, 8, 12}, {1, 2, 4}, {6, 12, 14}, {6, 18, 7}, {
+      7, 20, 6}, {6, 20, 19}, {17, 13, 16}, {17, 11, 13}, {13, 11, 7}, {7, 11,
+       20}, {15, 13, 7}, {16, 12, 17}, {12, 10, 17}, {12, 8, 14}, {13, 9, 
+      16}, {15, 9, 13}, {2, 9, 4}, {4, 9, 15}, {1, 9, 2}, {16, 9, 8}, {8, 9, 
+      1}, {17, 10, 11}, {20, 10, 19}, {11, 10, 20}}]]}, 
+   {RGBColor[0, 1, 0], GraphicsComplex3DBox[CompressedData["
 1:eJxTTMoPSmViYGDgB2JmIH7K7MbdYfHangEKjOvWnZ12VdiBL3gh76lLF+xX
 fJk+u/zxy/04xO1h4pWri3lWsj7bDzHlwX4c4nD1s75ZLdxd/x1u74kaxYOs
 QuIO+zILr93ivmvfvJwtwDfy234c4vYw8b1XLduuMH3ev+jXOb7X81/vxyEO
 V4/u39jqKVtK/KQw/ItD3B4mju5fHOJw9QCQ+Zyb
-    "], Polygon3DBox[{{3, 1, 8}, {8, 1, 6}, {6, 1, 7}, {7, 1, 2}, {7, 11, 
-     6}, {7, 12, 11}, {4, 5, 10}, {6, 11, 8}, {11, 13, 8}, {15, 13, 12}, {8, 
-     10, 3}, {10, 5, 3}, {12, 14, 15}, {2, 1, 3}, {12, 13, 11}, {15, 10, 
-     13}, {13, 10, 8}, {3, 5, 2}, {2, 5, 4}, {4, 9, 2}, {2, 9, 7}, {7, 9, 
-     12}, {12, 9, 14}, {10, 9, 4}, {15, 9, 10}, {14, 9, 15}}]], 
-   GraphicsComplex3DBox[CompressedData["
+     "], Polygon3DBox[{{3, 1, 8}, {8, 1, 6}, {6, 1, 7}, {7, 1, 2}, {7, 11, 
+      6}, {7, 12, 11}, {4, 5, 10}, {6, 11, 8}, {11, 13, 8}, {15, 13, 12}, {8, 
+      10, 3}, {10, 5, 3}, {12, 14, 15}, {2, 1, 3}, {12, 13, 11}, {15, 10, 
+      13}, {13, 10, 8}, {3, 5, 2}, {2, 5, 4}, {4, 9, 2}, {2, 9, 7}, {7, 9, 
+      12}, {12, 9, 14}, {10, 9, 4}, {15, 9, 10}, {14, 9, 15}}]]}, 
+   {RGBColor[1, 0, 0], GraphicsComplex3DBox[CompressedData["
 1:eJxTTMoPSmViYGAQAWJmIK5cXcyzkvWZ/X8wuG8fI9z7p3y2ogOa+H6YOG/w
 Qt5Tly7sX/Fl+uzyxy/tcYjD1T9jduPusHi9nwEKYOLbwrg7v134CDfnpvXf
 ra1bZdHF96OJ28PUW6dt/H7vvDy6+H6YONQ9cPUx1VO2lPhJoYvvh4k/Abvz
 tn3Ir9Nnd3/8AncPmvh+NPH9MPUwe9HE4e6BhOc3e1g4wMyBhg9cHOYeqHp4
 uKGa82w/PL5Q1MPF4f4CADmc/h8=
-    "], Polygon3DBox[{{16, 8, 17}, {17, 8, 12}, {10, 19, 20}, {11, 10, 20}, {
-     5, 18, 6}, {6, 14, 5}, {6, 7, 20}, {11, 17, 10}, {10, 17, 12}, {16, 17, 
-     9}, {9, 17, 13}, {13, 17, 11}, {9, 8, 16}, {19, 6, 20}, {2, 4, 1}, {12, 
-     14, 6}, {7, 15, 13}, {9, 1, 8}, {20, 7, 11}, {11, 7, 13}, {9, 4, 2}, {9, 
-     15, 4}, {2, 1, 9}, {12, 6, 10}, {10, 6, 19}, {4, 15, 5}, {4, 5, 3}, {6, 
-     18, 7}, {7, 18, 5}, {5, 15, 7}, {13, 15, 9}, {8, 14, 12}, {5, 14, 3}, {1,
-      3, 8}, {3, 14, 8}, {1, 4, 3}}]], GraphicsComplex3DBox[CompressedData["
+     "], Polygon3DBox[{{16, 8, 17}, {17, 8, 12}, {10, 19, 20}, {11, 10, 20}, {
+      5, 18, 6}, {6, 14, 5}, {6, 7, 20}, {11, 17, 10}, {10, 17, 12}, {16, 17, 
+      9}, {9, 17, 13}, {13, 17, 11}, {9, 8, 16}, {19, 6, 20}, {2, 4, 1}, {12, 
+      14, 6}, {7, 15, 13}, {9, 1, 8}, {20, 7, 11}, {11, 7, 13}, {9, 4, 2}, {9,
+       15, 4}, {2, 1, 9}, {12, 6, 10}, {10, 6, 19}, {4, 15, 5}, {4, 5, 3}, {6,
+       18, 7}, {7, 18, 5}, {5, 15, 7}, {13, 15, 9}, {8, 14, 12}, {5, 14, 3}, {
+      1, 3, 8}, {3, 14, 8}, {1, 4, 3}}]]}, 
+   {RGBColor[0, 1, 0], GraphicsComplex3DBox[CompressedData["
 1:eJxTTMoPSmViYGDgB2JmIH7C7MbdYfHangEMFuyJqZ6ypcRPyqFqdTHPStZv
 UHEGhpvWf7e2bpV14ApeyHvq0gX75V+mzy5//NIepn5bGHfntwsf7VdBxa3S
 Nn6/d17e4RnY/Nv2Ib9On9398Ys9zJyZ36wW7q7/DjV/w57jNYoHWYXEHfZc
@@ -1737,31 +1745,32 @@ tWy7wsTsALM3z6pg5ZePMg47Mguv3eK+a9+0nC3AN/KbPUw9d+D1sE2H/tm3
 QMUvG8sz7fBUcJgFNv+5fZbQ9uyFIkwOMHMm1T4V/6nN4PAY6u+31Wlt1Zni
 DmGXfGevTmBxgIVHls359p4LUg5ffCesTfjwzd7tT97l/72/4Oq/LJ8ZGeTG
 5OAOFT+d1nzy6SsZB+2qnzoXOn/aK9dtf/nfjdEBZg4Awa2kfw==
-    "], Polygon3DBox[{{9, 10, 15}, {7, 12, 6}, {6, 12, 11}, {9, 15, 14}, {11, 
-     14, 13}, {14, 15, 13}, {1, 2, 6}, {6, 2, 7}, {2, 5, 4}, {1, 5, 2}, {9, 
-     12, 7}, {9, 14, 12}, {3, 10, 5}, {3, 5, 1}, {4, 5, 9}, {5, 10, 9}, {13, 
-     8, 11}, {11, 8, 6}, {7, 2, 9}, {2, 4, 9}, {12, 14, 11}, {3, 8, 10}, {15, 
-     10, 13}, {10, 8, 13}, {6, 3, 1}, {6, 8, 3}}]], 
-   GraphicsComplex3DBox[CompressedData["
-1:eJxTTMoPSmViYGDgB2JmIFbaoVfGxsjocHR5y4OArT/szxkGHgxv5nYI/+wy
-bRELqwMDFEDUCTrc+mmw5sqvl/Yuyzv2e/5ldoCJz/pmtXB3/Xd7mPoTNYoH
-WYXEHfZlFl67xX3Xvnk5W4Bv5Dd7mDhv8ELeU5cu2K/4Mn12+eOX9kZ1685O
-uyrs8IzZjbvD4jXcHJj4tjDuzm8XPsLVr1BTFo1cwePwBKz+tn3Ir9Nnd3/8
-Yr9tr+uZ1jwBh8rVxTwrWb/BzYGJf/edsDbhwzd7jz95l//3/rJ/V53WVp0p
-7jCl9qn4T20GuP0w8fOuE27dP83skPFXqJz3yB/7GbLsLHdrhBzOz8leG5z9
-276gxrHk9VdGByuHypaEOBGHJY/bonMDWR0U/uaamn15a28DFQcAlWWZdw==
+     "], Polygon3DBox[{{9, 10, 15}, {7, 12, 6}, {6, 12, 11}, {9, 15, 14}, {11,
+       14, 13}, {14, 15, 13}, {1, 2, 6}, {6, 2, 7}, {2, 5, 4}, {1, 5, 2}, {9, 
+      12, 7}, {9, 14, 12}, {3, 10, 5}, {3, 5, 1}, {4, 5, 9}, {5, 10, 9}, {13, 
+      8, 11}, {11, 8, 6}, {7, 2, 9}, {2, 4, 9}, {12, 14, 11}, {3, 8, 10}, {15,
+       10, 13}, {10, 8, 13}, {6, 3, 1}, {6, 8, 3}}]]}, 
+   {RGBColor[0, 0, 1], GraphicsComplex3DBox[CompressedData["
+1:eJxTTMoPSmViYGDgB2JmIOYNXsh76tIF+xVfps8uf/zS3qhu3dlpV4UdnjG7
+cXdYvLZngAKY+LYw7s5vFz7C1a9QUxaNXMHj8ASs/rZ9yK/TZ3d//GK/ba/r
+mdY8AYfK1cU8K1m/wc2BiSvt0CtjY2R0OLq85UHA1h/25wwDD4Y3czuEf3aZ
+toiF1QGmHqJO0OHWT4M1V369tHdZ3rHf8y+zA0x81jerhbvrv8PNP1GjeJBV
+SNxhX2bhtVvcd+2bl7MF+EZ+s4eJf/edsDbhwzd7jz95l//3/rJ/V53WVp0p
+7jCl9qn4T20GuL9h4inL5K7Mu8Du8GnalY0XSl7bC75gYnB1EXbwKpJuyPBn
+deB9qC6o8/2fveESnxkttoIOKx5xLA489tueI+JSh2U7iwM/VD0AGAqWlg==
 
-    "], Polygon3DBox[{{4, 6, 5}, {4, 7, 6}, {11, 3, 14}, {11, 5, 3}, {2, 10, 
-     4}, {4, 12, 2}, {12, 15, 2}, {14, 3, 13}, {13, 3, 1}, {2, 13, 1}, {2, 15,
-      13}, {11, 13, 12}, {13, 15, 12}, {11, 14, 13}, {4, 5, 11}, {11, 12, 
-     4}, {5, 6, 3}, {3, 6, 9}, {10, 7, 4}, {7, 8, 6}, {10, 8, 7}, {9, 8, 3}, {
-     3, 8, 1}, {6, 8, 9}, {1, 8, 2}, {2, 8, 10}}]]},
-  AutomaticImageSize->True,
-  ImageSize->{415.7433351206008, 457.5536104701001},
-  ViewPoint->{-2.298041625966935, 2.4385567500645995`, 0.4716414549608841},
-  ViewVertical->{-0.15130587302058204`, 1.1142696350065568`, 
-   0.8045126666101051}]], "Output",
- CellChangeTimes->{{3.619976879298922*^9, 3.6199768873513823`*^9}}]
+     "], Polygon3DBox[{{6, 8, 3}, {3, 8, 4}, {4, 8, 1}, {1, 8, 10}, {7, 14, 
+      6}, {13, 14, 7}, {12, 11, 13}, {13, 15, 14}, {13, 11, 15}, {14, 15, 
+      6}, {6, 3, 7}, {3, 5, 7}, {15, 8, 6}, {2, 3, 1}, {2, 5, 3}, {3, 4, 1}, {
+      11, 10, 15}, {10, 8, 15}, {10, 9, 1}, {1, 9, 2}, {7, 9, 13}, {13, 9, 
+      12}, {12, 9, 11}, {11, 9, 10}, {2, 9, 5}, {5, 9, 7}}]]}},
+  ImageSize->{681.3730197422699, 753.3333333333334},
+  ViewPoint->{-1.2665958099578372`, 3.050756315082291, 0.7339080052586777},
+  ViewVertical->{-0.4173780528150892, 0.6506188427003093, 
+   0.9122943369667705}]], "Output",
+ CellChangeTimes->{{3.619976879298922*^9, 3.6199768873513823`*^9}, 
+   3.620037460504076*^9, 3.620051071099305*^9, 3.620051287871704*^9, 
+   3.620051325487855*^9, {3.6200513568256474`*^9, 3.620051393962772*^9}}]
 }, Open  ]]
 },
 WindowSize->{1920, 998},
@@ -1781,49 +1790,57 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 479, 12, 28, "Text"],
-Cell[1040, 34, 346, 5, 47, "Text"],
-Cell[1389, 41, 675, 17, 130, "Input"],
-Cell[2067, 60, 218, 3, 28, "Text"],
-Cell[2288, 65, 6473, 215, 634, "Input"],
-Cell[8764, 282, 247, 3, 28, "Text"],
-Cell[9014, 287, 5304, 170, 859, "Input"],
-Cell[14321, 459, 273, 4, 28, "Text"],
-Cell[14597, 465, 5363, 127, 490, "Input"],
-Cell[19963, 594, 290, 4, 28, "Text"],
-Cell[20256, 600, 8212, 200, 450, "Input"],
-Cell[28471, 802, 175, 2, 28, "Text"],
-Cell[28649, 806, 442, 6, 28, "Text"],
-Cell[29094, 814, 2548, 73, 90, "Input"],
-Cell[31645, 889, 228, 3, 28, "Text"],
-Cell[31876, 894, 2317, 63, 170, "Input"],
-Cell[34196, 959, 177, 2, 28, "Text"],
-Cell[34376, 963, 2071, 54, 150, "Input"],
-Cell[36450, 1019, 175, 2, 28, "Text"],
-Cell[36628, 1023, 1998, 58, 170, "Input"],
-Cell[38629, 1083, 226, 3, 28, "Text"],
-Cell[38858, 1088, 1716, 49, 150, "Input"],
-Cell[40577, 1139, 293, 5, 28, "Text"],
-Cell[40873, 1146, 1731, 50, 150, "Input"],
-Cell[42607, 1198, 247, 4, 28, "Text"],
+Cell[558, 20, 529, 12, 28, "Text"],
+Cell[1090, 34, 346, 5, 47, "Text"],
+Cell[1439, 41, 676, 17, 90, "Input"],
+Cell[2118, 60, 727, 10, 103, "Text"],
+Cell[2848, 72, 3505, 103, 110, "Input"],
+Cell[6356, 177, 218, 3, 28, "Text"],
+Cell[6577, 182, 5851, 198, 514, "Input"],
+Cell[12431, 382, 247, 3, 28, "Text"],
+Cell[12681, 387, 4777, 156, 759, "Input"],
+Cell[17461, 545, 273, 4, 28, "Text"],
+Cell[17737, 551, 5363, 127, 490, "Input"],
+Cell[23103, 680, 290, 4, 28, "Text"],
+Cell[23396, 686, 8212, 200, 450, "Input"],
+Cell[31611, 888, 175, 2, 28, "Text"],
+Cell[31789, 892, 227, 4, 28, "Text"],
+Cell[32019, 898, 1004, 26, 29, "Input"],
+Cell[33026, 926, 248, 3, 28, "Text"],
+Cell[33277, 931, 228, 3, 28, "Text"],
+Cell[33508, 936, 1080, 26, 50, "Input"],
+Cell[34591, 964, 177, 2, 28, "Text"],
+Cell[34771, 968, 931, 22, 29, "Input"],
+Cell[35705, 992, 175, 2, 28, "Text"],
+Cell[35883, 996, 760, 22, 50, "Input"],
+Cell[36646, 1020, 226, 3, 28, "Text"],
+Cell[36875, 1025, 580, 17, 29, "Input"],
+Cell[37458, 1044, 293, 5, 28, "Text"],
+Cell[37754, 1051, 594, 17, 29, "Input"],
+Cell[38351, 1070, 207, 3, 28, "Text"],
+Cell[38561, 1075, 1489, 39, 90, "Input"],
+Cell[40053, 1116, 341, 5, 28, "Text"],
+Cell[40397, 1123, 224, 3, 28, "Text"],
+Cell[40624, 1128, 1304, 34, 29, "Input"],
+Cell[41931, 1164, 338, 5, 28, "Text"],
+Cell[42272, 1171, 1030, 26, 29, "Input"],
+Cell[43305, 1199, 245, 3, 28, "Text"],
+Cell[43553, 1204, 693, 20, 29, "Input"],
+Cell[44249, 1226, 306, 5, 28, "Text"],
 Cell[CellGroupData[{
-Cell[42879, 1206, 2840, 80, 210, "Input"],
-Cell[45722, 1288, 2238, 36, 416, "Output"]
+Cell[44580, 1235, 3523, 93, 230, "Input"],
+Cell[48106, 1330, 2347, 40, 387, "Output"]
 }, Open  ]],
-Cell[47975, 1327, 200, 3, 28, "Text"],
+Cell[50468, 1373, 328, 5, 28, "Text"],
+Cell[50799, 1380, 315, 8, 29, "Input"],
+Cell[51117, 1390, 279, 4, 28, "Text"],
 Cell[CellGroupData[{
-Cell[48200, 1334, 2370, 66, 150, "Input"],
-Cell[50573, 1402, 1610, 25, 611, "Output"]
+Cell[51421, 1398, 3870, 113, 190, "Input"],
+Cell[55294, 1513, 5165, 87, 402, "Output"]
 }, Open  ]],
-Cell[52198, 1430, 288, 4, 28, "Text"],
 Cell[CellGroupData[{
-Cell[52511, 1438, 4289, 119, 210, "Input"],
-Cell[56803, 1559, 2736, 46, 426, "Output"]
-}, Open  ]],
-Cell[59554, 1608, 147, 2, 29, "Input"],
-Cell[CellGroupData[{
-Cell[59726, 1614, 2166, 56, 230, "Input"],
-Cell[61895, 1672, 5842, 91, 425, "Output"]
+Cell[60496, 1605, 2640, 71, 210, "Input"],
+Cell[63139, 1678, 6152, 94, 691, "Output"]
 }, Open  ]]
 }
 ]
