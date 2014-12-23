@@ -1,0 +1,434 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 10.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     13736,        425]
+NotebookOptionsPosition[     12972,        398]
+NotebookOutlinePosition[     13341,        414]
+CellTagsIndexPosition[     13298,        411]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[TextData[StyleBox["These are two functions that we will use. n(x1,x2,x3) \
+returns the unit normal vector to the plane defined by the three vectors \
+(x1,x2,x3). p( . ) returns the point shared by three planes, each of which is \
+defined by a unit normal vector to the plane and a point lying on the plane.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.6198874048266277`*^9, 3.6198874824500675`*^9}, 
+   3.6198890923751497`*^9}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"n", "[", 
+    RowBox[{"x1_", ",", "x2_", ",", "x3_"}], "]"}], ":=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"Normalize", "[", 
+      RowBox[{"Cross", "[", 
+       RowBox[{
+        RowBox[{"x3", "-", "x1"}], ",", 
+        RowBox[{"x2", "-", "x1"}]}], "]"}], "]"}], ",", "x2"}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"p", "[", 
+    RowBox[{
+    "n1_", ",", "n2_", ",", "n3_", ",", "p1_", ",", "p2_", ",", "p3_"}], 
+    "]"}], ":=", 
+   RowBox[{
+    RowBox[{"1", "/", 
+     RowBox[{"Det", "[", 
+      RowBox[{"{", 
+       RowBox[{"n1", ",", "n2", ",", "n3"}], "}"}], "]"}]}], "*", 
+    "\[IndentingNewLine]", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"p1", ".", "n1"}], ")"}], 
+       RowBox[{"Cross", "[", 
+        RowBox[{"n2", ",", "n3"}], "]"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"p2", ".", "n2"}], ")"}], 
+       RowBox[{"Cross", "[", 
+        RowBox[{"n3", ",", "n1"}], "]"}]}], "+", 
+      RowBox[{
+       RowBox[{"(", 
+        RowBox[{"p3", ".", "n3"}], ")"}], 
+       RowBox[{"Cross", "[", 
+        RowBox[{"n1", ",", "n2"}], "]"}]}]}], ")"}]}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.619883669947005*^9, 3.619883758694081*^9}, {
+  3.6198841248830256`*^9, 3.619884127651184*^9}, {3.619884163515235*^9, 
+  3.619884178130071*^9}, {3.6198843282276564`*^9, 3.619884385930957*^9}, {
+  3.619884640968544*^9, 3.6198846915204353`*^9}, {3.6198847896950507`*^9, 
+  3.6198848631432514`*^9}, {3.619889068354776*^9, 3.619889089201968*^9}}],
+
+Cell[TextData[StyleBox["First we clear all variables, import the TetGetLink \
+library used for displaying our 3D shapes, and define the golden ratio.\n\
+Note: we can clear our definition of tau, to see how things simplify in \
+abstract notation.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.6198003188276777`*^9, 3.619800376157957*^9}}],
+
+Cell[BoxData[{
+ RowBox[{"Clear", "[", "\"\<Global`*\>\"", "]"}], "\[IndentingNewLine]", 
+ RowBox[{"Needs", "[", "\"\<TetGenLink`\>\"", "]"}], "\n", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"tau", " ", "=", 
+    RowBox[{
+     RowBox[{"(", 
+      RowBox[{"1", "+", 
+       RowBox[{"Sqrt", "[", "5", "]"}]}], ")"}], "/", "2."}]}], ";"}], " ", 
+  RowBox[{"(*", 
+   RowBox[{"golden", " ", "ratio"}], "*)"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"(*", "\[IndentingNewLine]", 
+   RowBox[{"Clear", "[", "tau", "]"}], "\[IndentingNewLine]", 
+   "*)"}]}]}], "Input",
+ CellChangeTimes->{{3.6195448276221476`*^9, 3.6195448484893413`*^9}, {
+  3.61980033058335*^9, 3.619800330784362*^9}}],
+
+Cell[TextData[StyleBox["We define the standard barrelan parameters and the \
+vertices, with edge length (of top and bottom faces) normalized to 1.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.6198890464435225`*^9, 3.619889048287628*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"kappaP", "=", 
+   SqrtBox[
+    FractionBox[
+     RowBox[{"2", "+", "tau"}], "5"]]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"lambdaP", "=", 
+   SqrtBox[
+    RowBox[{
+     FractionBox["1", "20"], " ", 
+     RowBox[{"(", 
+      RowBox[{"3", "+", 
+       RowBox[{"4", " ", "tau"}]}], ")"}]}]]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"thetaB", "=", 
+   RowBox[{"\[Pi]", "-", 
+    RowBox[{"ArcTan", "[", "tau", "]"}]}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"bwidth", "=", 
+   RowBox[{
+    FractionBox["1", "2"], " ", 
+    RowBox[{"(", 
+     RowBox[{
+      RowBox[{"2", " ", "tau"}], "-", "1"}], ")"}], " ", "kappaP", " ", 
+    RowBox[{"Cos", "[", 
+     RowBox[{"thetaB", "-", 
+      FractionBox["\[Pi]", "2"]}], "]"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"midedgelength", "=", 
+   RowBox[{"1", "-", 
+    RowBox[{
+     RowBox[{
+      RowBox[{"Sqrt", "[", "5", "]"}], "/", "2"}], "*", 
+     RowBox[{"kappaP", "/", "lambdaP"}], "*", 
+     RowBox[{"Cos", "[", "thetaB", "]"}]}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"s1", "=", 
+   RowBox[{"Sin", "[", 
+    FractionBox[
+     RowBox[{"2", " ", "\[Pi]"}], "5"], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"c1", "=", 
+   RowBox[{"Cos", "[", 
+    FractionBox[
+     RowBox[{"2", " ", "\[Pi]"}], "5"], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"s2", "=", 
+   RowBox[{"Sin", "[", 
+    FractionBox[
+     RowBox[{"4", " ", "\[Pi]"}], "5"], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"c2", "=", 
+   RowBox[{"Cos", "[", 
+    FractionBox[
+     RowBox[{"4", " ", "\[Pi]"}], "5"], "]"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"p0", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"p1", "=", 
+   RowBox[{"{", 
+    RowBox[{"s1", ",", "c1", ",", "0"}], "}"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"p2", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", "s1"}], ",", "c1", ",", "0"}], "}"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"p3", "=", 
+   RowBox[{"{", 
+    RowBox[{"s2", ",", "c2", ",", "0"}], "}"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"p4", "=", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"-", "s2"}], ",", "c2", ",", "0"}], "}"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"zb", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "bwidth"}], "}"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b0", "=", 
+   RowBox[{
+    RowBox[{"p0", " ", "kappaP"}], "-", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b1", "=", 
+   RowBox[{
+    RowBox[{"p1", " ", "kappaP"}], "-", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b2", "=", 
+   RowBox[{
+    RowBox[{"p2", " ", "kappaP"}], "-", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b3", "=", 
+   RowBox[{
+    RowBox[{"p3", " ", "kappaP"}], "-", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b4", "=", 
+   RowBox[{
+    RowBox[{"p4", " ", "kappaP"}], "-", "zb"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b5", "=", 
+   RowBox[{"p0", " ", "kappaP", " ", "midedgelength"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b6", "=", 
+   RowBox[{"p1", " ", "kappaP", " ", "midedgelength"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b7", "=", 
+   RowBox[{"p2", " ", "kappaP", " ", "midedgelength"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b8", "=", 
+   RowBox[{"p3", " ", "kappaP", " ", "midedgelength"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b9", "=", 
+   RowBox[{"p4", " ", "kappaP", " ", "midedgelength"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"b10", "=", 
+   RowBox[{
+    RowBox[{"p0", " ", "kappaP"}], "+", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b11", "=", 
+   RowBox[{
+    RowBox[{"p1", " ", "kappaP"}], "+", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b12", "=", 
+   RowBox[{
+    RowBox[{"p2", " ", "kappaP"}], "+", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b13", "=", 
+   RowBox[{
+    RowBox[{"p3", " ", "kappaP"}], "+", "zb"}]}], ";"}], "\n", 
+ RowBox[{
+  RowBox[{"b14", "=", 
+   RowBox[{
+    RowBox[{"p4", " ", "kappaP"}], "+", "zb"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"barrelanPTS", "=", 
+   RowBox[{"{", 
+    RowBox[{
+    "b0", ",", "b1", ",", "b2", ",", "b3", ",", "b4", ",", "b5", ",", "b6", 
+     ",", "b7", ",", "b8", ",", "b9", ",", "b10", ",", "b11", ",", "b12", ",",
+      "b13", ",", "b14"}], "}"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.619889107921039*^9, 3.61988910950513*^9}}],
+
+Cell[TextData[StyleBox["We define the translation and rotation operators for \
+the dodecahedra and standard barrelan, that mostly are aligned along the \
+rhombohedral edge.",
+ FontWeight->"Bold"]], "Text",
+ CellChangeTimes->{{3.6198891228418922`*^9, 3.619889124521989*^9}}],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{
+   RowBox[{"thetaD", "=", 
+    RowBox[{"2", 
+     RowBox[{"ArcTan", "[", "tau", "]"}]}]}], ";", " ", 
+   RowBox[{"(*", 
+    RowBox[{"dihedral", " ", "angle"}], "*)"}], "\[IndentingNewLine]", 
+   RowBox[{"dwidth", "=", 
+    FractionBox[
+     RowBox[{"tau", "+", "1"}], 
+     SqrtBox[
+      RowBox[{"10", "-", 
+       RowBox[{"4", " ", "tau"}], "+", "2"}]]]}], ";"}], 
+  RowBox[{"(*", 
+   RowBox[{"dodecahedron", " ", "width"}], "*)"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"x", "=", 
+   RowBox[{"{", 
+    RowBox[{"1", ",", "0", ",", "0"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"y", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "1", ",", "0"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"z", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", "1"}], "}"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"theta1", "=", 
+   RowBox[{
+    RowBox[{"(", 
+     RowBox[{"Pi", "-", "thetaD"}], ")"}], "/", "2"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"theta2", "=", 
+   RowBox[{"Pi", "/", "2"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"theta3", "=", "Pi"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"theta4", "=", 
+   RowBox[{
+    RowBox[{"-", "Pi"}], "/", "2"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"theta5", "=", 
+   RowBox[{"3", 
+    RowBox[{"Pi", "/", "2"}]}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"theta6", "=", 
+    RowBox[{"2", 
+     RowBox[{"(", 
+      RowBox[{"Pi", "-", 
+       RowBox[{"thetaD", "/", "2"}]}], ")"}]}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"R1", "=", 
+   RowBox[{"RotationMatrix", "[", 
+    RowBox[{"theta1", ",", "y"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"R1inv", "=", 
+   RowBox[{"Inverse", "[", "R1", "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"R2", "=", 
+   RowBox[{"RotationMatrix", "[", 
+    RowBox[{"theta2", ",", "z"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"R3", "=", 
+   RowBox[{"RotationMatrix", "[", 
+    RowBox[{"theta3", ",", "z"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"R4", "=", 
+   RowBox[{"RotationMatrix", "[", 
+    RowBox[{"theta4", ",", "z"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"u", "=", 
+   RowBox[{"{", 
+    RowBox[{"s2", ",", "c2", ",", "0"}], "}"}]}], ";", 
+  RowBox[{"(*", 
+   RowBox[{
+   "rotation", " ", "axis", " ", "for", " ", "final", " ", "rotation"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{"R5", "=", 
+   RowBox[{"RotationMatrix", "[", 
+    RowBox[{"theta5", ",", "z"}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{
+   RowBox[{"R6", "=", 
+    RowBox[{"RotationMatrix", "[", 
+     RowBox[{"theta6", ",", "u"}], "]"}]}], ";"}], 
+  "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"T0", "=", 
+   RowBox[{"{", 
+    RowBox[{"0", ",", "0", ",", 
+     RowBox[{"dwidth", "+", "bwidth"}]}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"T1", "=", "T0"}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"T2", "=", 
+   RowBox[{"2", "T0"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"T3", "=", 
+   RowBox[{"3", "T0"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"T4", "=", 
+   RowBox[{"4", "T0"}]}], ";"}]}], "Input",
+ CellChangeTimes->{{3.6198891506264815`*^9, 3.6198891561958003`*^9}}],
+
+Cell["Plane 0 lies on one of the faces of barrelan 2 (B2).", "Text",
+ CellChangeTimes->{{3.619887535018074*^9, 3.6198875577853765`*^9}, {
+  3.6198889791596746`*^9, 3.619888980575755*^9}}],
+
+Cell["Plane 1 lies on one of the faces of barrelan 1 (B1).", "Text",
+ CellChangeTimes->{{3.6198875599935026`*^9, 3.619887569474045*^9}}],
+
+Cell["Plane 2 lies on one of the faces of barrelan 2 (B2).", "Text",
+ CellChangeTimes->{{3.6198875721782*^9, 3.6198875829298143`*^9}}],
+
+Cell["Plane 3 lies on one of the faces of barrelan 1 (B1).", "Text",
+ CellChangeTimes->{{3.619887585801979*^9, 3.619887596753605*^9}}],
+
+Cell["Plane 4...", "Text",
+ CellChangeTimes->{{3.6198875988497252`*^9, 3.6198875992577486`*^9}, {
+  3.619888967456005*^9, 3.619888967848027*^9}}],
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.61988739769022*^9, 3.6198874006273875`*^9}, {
+  3.619887524906496*^9, 3.619887529122737*^9}}]
+},
+WindowSize->{944, 982},
+WindowMargins->{{Automatic, 0}, {Automatic, 0}},
+Magnification:>0.9 Inherited,
+FrontEndVersion->"10.0 for Microsoft Windows (64-bit) (July 1, 2014)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 442, 6, 66, "Text"],
+Cell[1003, 28, 1593, 46, 70, "Input"],
+Cell[2599, 76, 346, 5, 47, "Text"],
+Cell[2948, 83, 675, 17, 130, "Input"],
+Cell[3626, 102, 247, 3, 28, "Text"],
+Cell[3876, 107, 4440, 151, 759, "Input"],
+Cell[8319, 260, 273, 4, 47, "Text"],
+Cell[8595, 266, 3477, 109, 574, "Input"],
+Cell[12075, 377, 187, 2, 28, "Text"],
+Cell[12265, 381, 136, 1, 28, "Text"],
+Cell[12404, 384, 134, 1, 28, "Text"],
+Cell[12541, 387, 134, 1, 28, "Text"],
+Cell[12678, 390, 145, 2, 28, "Text"],
+Cell[12826, 394, 142, 2, 29, "Input"]
+}
+]
+*)
+
+(* End of internal cache information *)

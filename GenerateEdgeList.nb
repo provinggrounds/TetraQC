@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     21541,        596]
-NotebookOptionsPosition[     20800,        568]
-NotebookOutlinePosition[     21140,        583]
-CellTagsIndexPosition[     21097,        580]
+NotebookDataLength[     25009,        656]
+NotebookOptionsPosition[     24420,        632]
+NotebookOutlinePosition[     24760,        647]
+CellTagsIndexPosition[     24717,        644]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -122,220 +122,225 @@ Cell[BoxData[
          RowBox[{"x1", ",", "x2", ",", "x3"}], "}"}]}], "}"}]}], "]"}], ";"}],
     "\[IndentingNewLine]", 
    RowBox[{
-    RowBox[{"Print", "[", "\"\<list 1:\>\"", "]"}], ";"}], 
+    RowBox[{"Print", "[", 
+     RowBox[{"\"\<list 1:\>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "list1", "]"}]}], "]"}], ";"}], 
    "\[IndentingNewLine]", 
    RowBox[{
     RowBox[{"Print", "[", 
-     RowBox[{"MatrixForm", "[", "list1", "]"}], "]"}], ";"}], 
+     RowBox[{"\"\<list 2:\>\"", ",", " ", 
+      RowBox[{"MatrixForm", "[", "list2", "]"}]}], "]"}], ";"}], 
    "\[IndentingNewLine]", 
    RowBox[{
-    RowBox[{"Print", "[", "\"\<list 2:\>\"", "]"}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Print", "[", 
-     RowBox[{"MatrixForm", "[", "list2", "]"}], "]"}], ";"}], 
-   "\[IndentingNewLine]", "\[IndentingNewLine]", 
-   RowBox[{"(*", 
     RowBox[{
-     RowBox[{
-     "produce", " ", "mapping", " ", "of", " ", "vertices", " ", "in", " ", 
-      "list2", " ", "to", " ", "existing", " ", "vertices", " ", "in", " ", 
-      "list1"}], ",", " ", 
-     RowBox[{"if", " ", "overlap"}]}], "*)"}], "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"vertexmapping", "=", 
-     RowBox[{"{", "}"}]}], ";"}], "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"counter", "=", 
-     RowBox[{
-      RowBox[{"Length", "[", "list1", "]"}], "+", "1"}]}], ";", 
-    RowBox[{"(*", 
-     RowBox[{"counter", " ", "for", " ", "new", " ", "indices"}], "*)"}], 
-    "\[IndentingNewLine]", 
-    RowBox[{"Do", "[", "\[IndentingNewLine]", 
-     RowBox[{
+     RowBox[{"CombineLists", "[", 
+      RowBox[{"listA_", ",", "listB_"}], "]"}], ":=", 
+     RowBox[{"(", "\[IndentingNewLine]", 
       RowBox[{
-       RowBox[{"pos", "=", 
-        RowBox[{"Position", "[", 
-         RowBox[{
-          RowBox[{"list1", "[", 
-           RowBox[{"[", 
-            RowBox[{"All", ",", "2"}], "]"}], "]"}], ",", 
-          RowBox[{"Part", "[", 
-           RowBox[{
-            RowBox[{"list2", "[", 
-             RowBox[{"[", "i", "]"}], "]"}], ",", "2"}], "]"}]}], "]"}]}], 
-       ";", "\[IndentingNewLine]", 
-       RowBox[{"If", "[", 
+       RowBox[{"list1", "=", "listA"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"list2", "=", "listB"}], ";", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
         RowBox[{
          RowBox[{
-          RowBox[{"Length", "[", "pos", "]"}], ">", "0"}], ",", 
-         "\[IndentingNewLine]", 
-         RowBox[{
-          RowBox[{"AppendTo", "[", 
-           RowBox[{"vertexmapping", ",", 
-            RowBox[{"{", 
-             RowBox[{"i", ",", 
-              RowBox[{"list1", "[", 
-               RowBox[{"[", 
-                RowBox[{
-                 RowBox[{"First", "[", 
-                  RowBox[{"First", "[", "pos", "]"}], "]"}], ",", "1"}], 
-                "]"}], "]"}], ",", 
-              RowBox[{"list2", "[", 
-               RowBox[{"[", 
-                RowBox[{"i", ",", "3"}], "]"}], "]"}]}], "}"}]}], "]"}], 
-          ";"}], ",", 
-         RowBox[{"(*", 
-          RowBox[{"gives", " ", "existing", " ", "index"}], "*)"}], 
-         "\[IndentingNewLine]", 
-         RowBox[{
-          RowBox[{"AppendTo", "[", 
-           RowBox[{"vertexmapping", ",", 
-            RowBox[{"{", 
-             RowBox[{"i", ",", "counter", ",", 
-              RowBox[{"list2", "[", 
-               RowBox[{"[", 
-                RowBox[{"i", ",", "3"}], "]"}], "]"}]}], "}"}]}], "]"}], ";", 
-          RowBox[{"(*", 
-           RowBox[{"gives", " ", "new", " ", "index"}], "*)"}], 
-          "\[IndentingNewLine]", 
-          RowBox[{"counter", "=", 
-           RowBox[{"counter", "+", "1"}]}], ";"}]}], "\[IndentingNewLine]", 
-        "]"}], ";"}], ",", "\[IndentingNewLine]", 
-      RowBox[{"{", 
-       RowBox[{"i", ",", 
-        RowBox[{"Length", "[", "list2", "]"}]}], "}"}]}], 
-     "\[IndentingNewLine]", "]"}]}], "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Print", "[", "\"\<vertex mapping:\>\"", "]"}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Print", "[", 
-     RowBox[{"MatrixForm", "[", "vertexmapping", "]"}], "]"}], ";"}], 
-   "\[IndentingNewLine]", "\[IndentingNewLine]", 
-   RowBox[{"(*", 
-    RowBox[{"apply", " ", "map"}], "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"Do", "[", "\[IndentingNewLine]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"curindex", " ", "=", " ", 
-       RowBox[{"i", "[", 
-        RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"newindex", "=", 
-       RowBox[{"i", "[", 
-        RowBox[{"[", "2", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"neighbors", "=", 
-       RowBox[{"i", "[", 
-        RowBox[{"[", "3", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-      "\[IndentingNewLine]", 
-      RowBox[{"(*", 
-       RowBox[{
-       "replaces", " ", "newindex", " ", "of", " ", "current", " ", "cell"}], 
-       "*)"}], "\[IndentingNewLine]", 
-      RowBox[{"list2", " ", "=", " ", 
-       RowBox[{"ReplacePart", "[", 
-        RowBox[{"list2", ",", 
-         RowBox[{
-          RowBox[{"{", 
-           RowBox[{"curindex", ",", "1"}], "}"}], "\[Rule]", "newindex"}]}], 
-        "]"}]}], ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
-      RowBox[{"(*", 
-       RowBox[{
-       "replaces", " ", "newindex", " ", "for", " ", "all", " ", "neighbors", 
-        " ", "of", " ", "current", " ", "cell"}], "*)"}], 
-      "\[IndentingNewLine]", 
-      RowBox[{"Do", "[", "\[IndentingNewLine]", 
-       RowBox[{
+         "produce", " ", "mapping", " ", "of", " ", "vertices", " ", "in", 
+          " ", "list2", " ", "to", " ", "existing", " ", "vertices", " ", 
+          "in", " ", "list1"}], ",", " ", 
+         RowBox[{"if", " ", "overlap"}]}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{"vertexmapping", "=", 
+        RowBox[{"{", "}"}]}], ";", "\[IndentingNewLine]", 
+       RowBox[{"counter", "=", 
         RowBox[{
-         RowBox[{"nbrindex", "=", 
-          RowBox[{"First", "[", 
-           RowBox[{"First", "[", 
+         RowBox[{"Length", "[", "list1", "]"}], "+", "1"}]}], ";", 
+       RowBox[{"(*", 
+        RowBox[{"counter", " ", "for", " ", "new", " ", "indices"}], "*)"}], 
+       "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Do", "[", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"pos", "=", 
             RowBox[{"Position", "[", 
              RowBox[{
-              RowBox[{"list2", "[", 
+              RowBox[{"list1", "[", 
                RowBox[{"[", 
-                RowBox[{"j", ",", "3"}], "]"}], "]"}], ",", "curindex"}], 
-             "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-         RowBox[{
-          RowBox[{"list2", "[", 
-           RowBox[{"[", 
-            RowBox[{"j", ",", "3"}], "]"}], "]"}], "=", 
-          RowBox[{"ReplacePart", "[", 
-           RowBox[{
-            RowBox[{"list2", "[", 
-             RowBox[{"[", 
-              RowBox[{"j", ",", "3"}], "]"}], "]"}], ",", 
-            RowBox[{"{", 
-             RowBox[{"nbrindex", "\[Rule]", "newindex"}], "}"}]}], "]"}]}], 
-         ";"}], ",", "\[IndentingNewLine]", 
-        RowBox[{"{", 
-         RowBox[{"j", ",", "neighbors"}], "}"}]}], "\[IndentingNewLine]", 
-       "]"}]}], ",", "\[IndentingNewLine]", 
-     RowBox[{"{", 
-      RowBox[{"i", ",", "vertexmapping"}], "}"}]}], "\[IndentingNewLine]", 
-    "]"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Print", "[", "\"\<updated list 2:\>\"", "]"}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{"Print", "[", 
-    RowBox[{"MatrixForm", "[", "list2", "]"}], "]"}], "\[IndentingNewLine]", 
-   "\[IndentingNewLine]", 
-   RowBox[{"(*", 
-    RowBox[{"merge", " ", "lists"}], "*)"}], "\[IndentingNewLine]", 
-   RowBox[{"Do", "[", "\[IndentingNewLine]", 
-    RowBox[{
-     RowBox[{
-      RowBox[{"curindex", "=", 
-       RowBox[{"list2", "[", 
-        RowBox[{"[", 
-         RowBox[{"i", ",", "1"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"pos", "=", 
-       RowBox[{"Position", "[", 
-        RowBox[{
-         RowBox[{"list1", "[", 
-          RowBox[{"[", 
-           RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", "curindex"}], 
-        "]"}]}], ";", "\[IndentingNewLine]", 
-      RowBox[{"If", "[", 
+                RowBox[{"All", ",", "2"}], "]"}], "]"}], ",", 
+              RowBox[{"Part", "[", 
+               RowBox[{
+                RowBox[{"list2", "[", 
+                 RowBox[{"[", "i", "]"}], "]"}], ",", "2"}], "]"}]}], "]"}]}],
+            ";", "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "[", "pos", "]"}], ">", "0"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"AppendTo", "[", 
+               RowBox[{"vertexmapping", ",", 
+                RowBox[{"{", 
+                 RowBox[{"i", ",", 
+                  RowBox[{"list1", "[", 
+                   RowBox[{"[", 
+                    RowBox[{
+                    RowBox[{"First", "[", 
+                    RowBox[{"First", "[", "pos", "]"}], "]"}], ",", "1"}], 
+                    "]"}], "]"}], ",", 
+                  RowBox[{"list2", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"i", ",", "3"}], "]"}], "]"}]}], "}"}]}], "]"}], 
+              ";"}], ",", 
+             RowBox[{"(*", 
+              RowBox[{"gives", " ", "existing", " ", "index"}], "*)"}], 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"AppendTo", "[", 
+               RowBox[{"vertexmapping", ",", 
+                RowBox[{"{", 
+                 RowBox[{"i", ",", "counter", ",", 
+                  RowBox[{"list2", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"i", ",", "3"}], "]"}], "]"}]}], "}"}]}], "]"}], 
+              ";", 
+              RowBox[{"(*", 
+               RowBox[{"gives", " ", "new", " ", "index"}], "*)"}], 
+              "\[IndentingNewLine]", 
+              RowBox[{"counter", "=", 
+               RowBox[{"counter", "+", "1"}]}], ";"}]}], 
+            "\[IndentingNewLine]", "]"}], ";"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"Length", "[", "list2", "]"}]}], "}"}]}], 
+         "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<vertex mapping:\>\"", ",", 
+          RowBox[{"MatrixForm", "[", "vertexmapping", "]"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"apply", " ", "map"}], "*)"}], "\[IndentingNewLine]", 
        RowBox[{
-        RowBox[{
-         RowBox[{"Length", "[", "pos", "]"}], ">", "0"}], ",", 
-        "\[IndentingNewLine]", 
-        RowBox[{
-         RowBox[{"pos", "=", 
-          RowBox[{"First", "[", 
-           RowBox[{"First", "[", "pos", "]"}], "]"}]}], ";", 
-         "\[IndentingNewLine]", 
+        RowBox[{"Do", "[", "\[IndentingNewLine]", 
          RowBox[{
-          RowBox[{"list1", "[", 
-           RowBox[{"[", 
-            RowBox[{"pos", ",", "3"}], "]"}], "]"}], "=", 
-          RowBox[{"Union", "[", 
-           RowBox[{
-            RowBox[{"list1", "[", 
-             RowBox[{"[", 
-              RowBox[{"pos", ",", "3"}], "]"}], "]"}], ",", 
+          RowBox[{
+           RowBox[{"curindex", " ", "=", " ", 
+            RowBox[{"i", "[", 
+             RowBox[{"[", "1", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"newindex", "=", 
+            RowBox[{"i", "[", 
+             RowBox[{"[", "2", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"neighbors", "=", 
+            RowBox[{"i", "[", 
+             RowBox[{"[", "3", "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+           "\[IndentingNewLine]", 
+           RowBox[{"(*", 
+            RowBox[{
+            "replaces", " ", "newindex", " ", "of", " ", "current", " ", 
+             "cell"}], "*)"}], "\[IndentingNewLine]", 
+           RowBox[{"list2", " ", "=", " ", 
+            RowBox[{"ReplacePart", "[", 
+             RowBox[{"list2", ",", 
+              RowBox[{
+               RowBox[{"{", 
+                RowBox[{"curindex", ",", "1"}], "}"}], "\[Rule]", 
+               "newindex"}]}], "]"}]}], ";", "\[IndentingNewLine]", 
+           "\[IndentingNewLine]", 
+           RowBox[{"(*", 
+            RowBox[{
+            "replaces", " ", "newindex", " ", "for", " ", "all", " ", 
+             "neighbors", " ", "of", " ", "current", " ", "cell"}], "*)"}], 
+           "\[IndentingNewLine]", 
+           RowBox[{"Do", "[", "\[IndentingNewLine]", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"nbrindex", "=", 
+               RowBox[{"First", "[", 
+                RowBox[{"First", "[", 
+                 RowBox[{"Position", "[", 
+                  RowBox[{
+                   RowBox[{"list2", "[", 
+                    RowBox[{"[", 
+                    RowBox[{"j", ",", "3"}], "]"}], "]"}], ",", "curindex"}], 
+                  "]"}], "]"}], "]"}]}], ";", "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"list2", "[", 
+                RowBox[{"[", 
+                 RowBox[{"j", ",", "3"}], "]"}], "]"}], "=", 
+               RowBox[{"Sort", "[", 
+                RowBox[{"ReplacePart", "[", 
+                 RowBox[{
+                  RowBox[{"list2", "[", 
+                   RowBox[{"[", 
+                    RowBox[{"j", ",", "3"}], "]"}], "]"}], ",", 
+                  RowBox[{"{", 
+                   RowBox[{"nbrindex", "\[Rule]", "newindex"}], "}"}]}], 
+                 "]"}], "]"}]}], ";"}], ",", "\[IndentingNewLine]", 
+             RowBox[{"{", 
+              RowBox[{"j", ",", "neighbors"}], "}"}]}], "\[IndentingNewLine]",
+             "]"}]}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", "vertexmapping"}], "}"}]}], 
+         "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<updated list 2:\>\"", ",", " ", 
+          RowBox[{"MatrixForm", "[", "list2", "]"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", "\[IndentingNewLine]", 
+       RowBox[{"(*", 
+        RowBox[{"merge", " ", "lists"}], "*)"}], "\[IndentingNewLine]", 
+       RowBox[{
+        RowBox[{"Do", "[", "\[IndentingNewLine]", 
+         RowBox[{
+          RowBox[{
+           RowBox[{"curindex", "=", 
             RowBox[{"list2", "[", 
              RowBox[{"[", 
-              RowBox[{"i", ",", "3"}], "]"}], "]"}]}], "]"}]}], ";"}], 
-        "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
-        RowBox[{
-         RowBox[{"AppendTo", "[", 
-          RowBox[{"list1", ",", 
-           RowBox[{"list2", "[", 
-            RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";"}]}], 
-       "\[IndentingNewLine]", "]"}], ";"}], ",", "\[IndentingNewLine]", 
-     RowBox[{"{", 
-      RowBox[{"i", ",", 
-       RowBox[{"Length", "[", "list2", "]"}]}], "}"}]}], 
-    "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Print", "[", "\"\<merged list:\>\"", "]"}], ";"}], 
-   "\[IndentingNewLine]", 
-   RowBox[{
-    RowBox[{"Print", "[", 
-     RowBox[{"MatrixForm", "[", "list1", "]"}], "]"}], ";"}]}]}]], "Input",
+              RowBox[{"i", ",", "1"}], "]"}], "]"}]}], ";", 
+           "\[IndentingNewLine]", 
+           RowBox[{"pos", "=", 
+            RowBox[{"Position", "[", 
+             RowBox[{
+              RowBox[{"list1", "[", 
+               RowBox[{"[", 
+                RowBox[{"All", ",", "1"}], "]"}], "]"}], ",", "curindex"}], 
+             "]"}]}], ";", "\[IndentingNewLine]", 
+           RowBox[{"If", "[", 
+            RowBox[{
+             RowBox[{
+              RowBox[{"Length", "[", "pos", "]"}], ">", "0"}], ",", 
+             "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"pos", "=", 
+               RowBox[{"First", "[", 
+                RowBox[{"First", "[", "pos", "]"}], "]"}]}], ";", 
+              "\[IndentingNewLine]", 
+              RowBox[{
+               RowBox[{"list1", "[", 
+                RowBox[{"[", 
+                 RowBox[{"pos", ",", "3"}], "]"}], "]"}], "=", 
+               RowBox[{"Union", "[", 
+                RowBox[{
+                 RowBox[{"list1", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"pos", ",", "3"}], "]"}], "]"}], ",", 
+                 RowBox[{"list2", "[", 
+                  RowBox[{"[", 
+                   RowBox[{"i", ",", "3"}], "]"}], "]"}]}], "]"}]}], ";"}], 
+             "\[IndentingNewLine]", ",", "\[IndentingNewLine]", 
+             RowBox[{
+              RowBox[{"AppendTo", "[", 
+               RowBox[{"list1", ",", 
+                RowBox[{"list2", "[", 
+                 RowBox[{"[", "i", "]"}], "]"}]}], "]"}], ";"}]}], 
+            "\[IndentingNewLine]", "]"}], ";"}], ",", "\[IndentingNewLine]", 
+          RowBox[{"{", 
+           RowBox[{"i", ",", 
+            RowBox[{"Length", "[", "list2", "]"}]}], "}"}]}], 
+         "\[IndentingNewLine]", "]"}], "\[IndentingNewLine]", 
+        RowBox[{"Print", "[", 
+         RowBox[{"\"\<merged list:\>\"", ",", " ", 
+          RowBox[{"MatrixForm", "[", "list1", "]"}]}], "]"}]}], ";", 
+       "\[IndentingNewLine]", "list1"}], "\[IndentingNewLine]", ")"}]}], 
+    ";"}], "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   RowBox[{"CombineLists", "[", 
+    RowBox[{"list1", ",", "list2"}], "]"}]}]}]], "Input",
  CellChangeTimes->{{3.620385600458067*^9, 3.6203857294314437`*^9}, {
    3.620385760775236*^9, 3.620385805437791*^9}, {3.620385860893963*^9, 
    3.620385865165207*^9}, {3.6203873646989756`*^9, 3.620387459465396*^9}, {
@@ -371,199 +376,258 @@ Cell[BoxData[
    3.620404949453515*^9, 3.620404958525034*^9}, {3.6204050021335287`*^9, 
    3.620405123979498*^9}, {3.620405253802923*^9, 3.6204052939862213`*^9}, {
    3.6204058572784395`*^9, 3.6204059094364233`*^9}, {3.620405961096378*^9, 
-   3.6204060809752345`*^9}, {3.620406121006524*^9, 3.6204061978389187`*^9}}],
+   3.6204060809752345`*^9}, {3.620406121006524*^9, 3.6204061978389187`*^9}, {
+   3.620472502123308*^9, 3.6204725605436497`*^9}, {3.6204725929595037`*^9, 
+   3.620472595606655*^9}, {3.6204956929542446`*^9, 3.6204957027938075`*^9}, {
+   3.620496078814315*^9, 3.620496096581331*^9}, {3.6204962592586355`*^9, 
+   3.6204962673821*^9}, {3.6204966957125993`*^9, 3.620496696232629*^9}}],
 
 Cell[CellGroupData[{
 
-Cell[BoxData["\<\"list 1:\"\>"], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.6204061390625567`*^9}}],
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"list 1:\"\>", "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "3", ",", "4"}], "}"}]},
+       {"2", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "3", ",", "4"}], "}"}]},
+       {"3", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "4"}], "}"}]},
+       {"4", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "3"}], "}"}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["list 1:", 
+   MatrixForm[{{1, {0, 0, 1}, {2, 3, 4}}, {2, {1, 1, 0}, {1, 3, 4}}, {
+     3, {0, 1, 0}, {1, 2, 4}}, {4, {1, 0, 0}, {1, 2, 3}}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.6204962329151287`*^9, 3.6204962679011297`*^9, 
+  3.620496697082678*^9}],
 
 Cell[BoxData[
- TagBox[
-  RowBox[{"(", "\[NoBreak]", GridBox[{
-     {"1", 
-      RowBox[{"{", 
-       RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"2", ",", "3", ",", "4"}], "}"}]},
-     {"2", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "1", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "3", ",", "4"}], "}"}]},
-     {"3", 
-      RowBox[{"{", 
-       RowBox[{"0", ",", "1", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "2", ",", "4"}], "}"}]},
-     {"4", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "2", ",", "3"}], "}"}]}
-    },
-    GridBoxAlignment->{
-     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
-      "RowsIndexed" -> {}},
-    GridBoxSpacings->{"Columns" -> {
-        Offset[0.27999999999999997`], {
-         Offset[0.7]}, 
-        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
-        Offset[0.2], {
-         Offset[0.4]}, 
-        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
-  Function[BoxForm`e$, 
-   MatrixForm[BoxForm`e$]]]], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.620406139064557*^9}}],
-
-Cell[BoxData["\<\"list 2:\"\>"], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.6204061390655575`*^9}}],
-
-Cell[BoxData[
- TagBox[
-  RowBox[{"(", "\[NoBreak]", GridBox[{
-     {"1", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"2", ",", "3"}], "}"}]},
-     {"2", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "1", ",", "1"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "3"}], "}"}]},
-     {"3", 
-      RowBox[{"{", 
-       RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "2"}], "}"}]}
-    },
-    GridBoxAlignment->{
-     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
-      "RowsIndexed" -> {}},
-    GridBoxSpacings->{"Columns" -> {
-        Offset[0.27999999999999997`], {
-         Offset[0.7]}, 
-        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
-        Offset[0.2], {
-         Offset[0.4]}, 
-        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
-  Function[BoxForm`e$, 
-   MatrixForm[BoxForm`e$]]]], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.620406139066557*^9}}],
-
-Cell[BoxData["\<\"vertex mapping:\"\>"], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.6204061390675573`*^9}}],
+ InterpretationBox[
+  RowBox[{"\<\"list 2:\"\>", "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "3"}], "}"}]},
+       {"2", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1", ",", "1"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "3"}], "}"}]},
+       {"3", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2"}], "}"}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["list 2:", 
+   MatrixForm[{{1, {1, 0, 0}, {2, 3}}, {2, {1, 1, 1}, {1, 3}}, {
+     3, {0, 0, 1}, {1, 2}}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.6204962329151287`*^9, 3.6204962679011297`*^9, 
+  3.6204966970856776`*^9}],
 
 Cell[BoxData[
- TagBox[
-  RowBox[{"(", "\[NoBreak]", GridBox[{
-     {"1", "4", 
-      RowBox[{"{", 
-       RowBox[{"2", ",", "3"}], "}"}]},
-     {"2", "5", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "3"}], "}"}]},
-     {"3", "1", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "2"}], "}"}]}
-    },
-    GridBoxAlignment->{
-     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
-      "RowsIndexed" -> {}},
-    GridBoxSpacings->{"Columns" -> {
-        Offset[0.27999999999999997`], {
-         Offset[0.7]}, 
-        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
-        Offset[0.2], {
-         Offset[0.4]}, 
-        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
-  Function[BoxForm`e$, 
-   MatrixForm[BoxForm`e$]]]], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.6204061390675573`*^9}}],
-
-Cell[BoxData["\<\"updated list 2:\"\>"], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.6204061390685573`*^9}}],
-
-Cell[BoxData[
- TagBox[
-  RowBox[{"(", "\[NoBreak]", GridBox[{
-     {"4", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"5", ",", "1"}], "}"}]},
-     {"5", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "1", ",", "1"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"4", ",", "1"}], "}"}]},
-     {"1", 
-      RowBox[{"{", 
-       RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"4", ",", "5"}], "}"}]}
-    },
-    GridBoxAlignment->{
-     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
-      "RowsIndexed" -> {}},
-    GridBoxSpacings->{"Columns" -> {
-        Offset[0.27999999999999997`], {
-         Offset[0.7]}, 
-        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
-        Offset[0.2], {
-         Offset[0.4]}, 
-        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
-  Function[BoxForm`e$, 
-   MatrixForm[BoxForm`e$]]]], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.620406139069557*^9}}],
-
-Cell[BoxData["\<\"merged list:\"\>"], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.6204061390755577`*^9}}],
+ InterpretationBox[
+  RowBox[{"\<\"vertex mapping:\"\>", "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1", "4", 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "3"}], "}"}]},
+       {"2", "5", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "3"}], "}"}]},
+       {"3", "1", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2"}], "}"}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["vertex mapping:", 
+   MatrixForm[{{1, 4, {2, 3}}, {2, 5, {1, 3}}, {3, 1, {1, 2}}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.6204962329151287`*^9, 3.6204962679011297`*^9, 
+  3.6204966970866776`*^9}],
 
 Cell[BoxData[
- TagBox[
-  RowBox[{"(", "\[NoBreak]", GridBox[{
-     {"1", 
-      RowBox[{"{", 
-       RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"2", ",", "3", ",", "4", ",", "5"}], "}"}]},
-     {"2", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "1", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "3", ",", "4"}], "}"}]},
-     {"3", 
-      RowBox[{"{", 
-       RowBox[{"0", ",", "1", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "2", ",", "4"}], "}"}]},
-     {"4", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "2", ",", "3", ",", "5"}], "}"}]},
-     {"5", 
-      RowBox[{"{", 
-       RowBox[{"1", ",", "1", ",", "1"}], "}"}], 
-      RowBox[{"{", 
-       RowBox[{"4", ",", "1"}], "}"}]}
-    },
-    GridBoxAlignment->{
-     "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
-      "RowsIndexed" -> {}},
-    GridBoxSpacings->{"Columns" -> {
-        Offset[0.27999999999999997`], {
-         Offset[0.7]}, 
-        Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
-        Offset[0.2], {
-         Offset[0.4]}, 
-        Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
-  Function[BoxForm`e$, 
-   MatrixForm[BoxForm`e$]]]], "Print",
- CellChangeTimes->{{3.620406117521325*^9, 3.6204061390775576`*^9}}]
-}, Open  ]]
+ InterpretationBox[
+  RowBox[{"\<\"updated list 2:\"\>", "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"4", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "5"}], "}"}]},
+       {"5", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1", ",", "1"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "4"}], "}"}]},
+       {"1", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"4", ",", "5"}], "}"}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["updated list 2:", 
+   MatrixForm[{{4, {1, 0, 0}, {1, 5}}, {5, {1, 1, 1}, {1, 4}}, {
+     1, {0, 0, 1}, {4, 5}}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.6204962329151287`*^9, 3.6204962679011297`*^9, 
+  3.620496697088678*^9}],
+
+Cell[BoxData[
+ InterpretationBox[
+  RowBox[{"\<\"merged list:\"\>", "\[InvisibleSpace]", 
+   TagBox[
+    RowBox[{"(", "\[NoBreak]", GridBox[{
+       {"1", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "0", ",", "1"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"2", ",", "3", ",", "4", ",", "5"}], "}"}]},
+       {"2", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "3", ",", "4"}], "}"}]},
+       {"3", 
+        RowBox[{"{", 
+         RowBox[{"0", ",", "1", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "4"}], "}"}]},
+       {"4", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "0", ",", "0"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "2", ",", "3", ",", "5"}], "}"}]},
+       {"5", 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "1", ",", "1"}], "}"}], 
+        RowBox[{"{", 
+         RowBox[{"1", ",", "4"}], "}"}]}
+      },
+      GridBoxAlignment->{
+       "Columns" -> {{Center}}, "ColumnsIndexed" -> {}, 
+        "Rows" -> {{Baseline}}, "RowsIndexed" -> {}},
+      GridBoxSpacings->{"Columns" -> {
+          Offset[0.27999999999999997`], {
+           Offset[0.7]}, 
+          Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+          Offset[0.2], {
+           Offset[0.4]}, 
+          Offset[0.2]}, "RowsIndexed" -> {}}], "\[NoBreak]", ")"}],
+    Function[BoxForm`e$, 
+     MatrixForm[BoxForm`e$]]]}],
+  SequenceForm["merged list:", 
+   MatrixForm[{{1, {0, 0, 1}, {2, 3, 4, 5}}, {2, {1, 1, 0}, {1, 3, 4}}, {
+     3, {0, 1, 0}, {1, 2, 4}}, {4, {1, 0, 0}, {1, 2, 3, 5}}, {
+     5, {1, 1, 1}, {1, 4}}}]],
+  Editable->False]], "Print",
+ CellChangeTimes->{3.6204962329151287`*^9, 3.6204962679011297`*^9, 
+  3.620496697090678*^9}]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{
+   RowBox[{"{", 
+    RowBox[{"1", ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "0", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"2", ",", "3", ",", "4", ",", "5"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"2", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "1", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "3", ",", "4"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"3", ",", 
+     RowBox[{"{", 
+      RowBox[{"0", ",", "1", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", "4"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"4", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "0", ",", "0"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "2", ",", "3", ",", "5"}], "}"}]}], "}"}], ",", 
+   RowBox[{"{", 
+    RowBox[{"5", ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "1", ",", "1"}], "}"}], ",", 
+     RowBox[{"{", 
+      RowBox[{"1", ",", "4"}], "}"}]}], "}"}]}], "}"}]], "Output",
+ CellChangeTimes->{3.620496697092678*^9}]
 }, Open  ]]
 },
 WindowSize->{1904, 998},
@@ -584,19 +648,15 @@ CellTagsIndex->{}
 Notebook[{
 Cell[558, 20, 303, 4, 30, "Text"],
 Cell[CellGroupData[{
-Cell[886, 28, 13723, 345, 1352, "Input"],
+Cell[886, 28, 15188, 354, 1352, "Input"],
 Cell[CellGroupData[{
-Cell[14634, 377, 109, 1, 23, "Print"],
-Cell[14746, 380, 1224, 36, 65, "Print"],
-Cell[15973, 418, 109, 1, 23, "Print"],
-Cell[16085, 421, 1042, 31, 50, "Print"],
-Cell[17130, 454, 117, 1, 23, "Print"],
-Cell[17250, 457, 849, 25, 50, "Print"],
-Cell[18102, 484, 117, 1, 23, "Print"],
-Cell[18222, 487, 1042, 31, 50, "Print"],
-Cell[19267, 520, 114, 1, 23, "Print"],
-Cell[19384, 523, 1388, 41, 80, "Print"]
-}, Open  ]]
+Cell[16099, 386, 1573, 43, 65, "Print"],
+Cell[17675, 431, 1347, 38, 50, "Print"],
+Cell[19025, 471, 1126, 31, 50, "Print"],
+Cell[20154, 504, 1361, 38, 50, "Print"],
+Cell[21518, 544, 1791, 49, 80, "Print"]
+}, Open  ]],
+Cell[23324, 596, 1080, 33, 31, "Output"]
 }, Open  ]]
 }
 ]
