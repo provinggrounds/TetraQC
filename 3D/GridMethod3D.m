@@ -164,6 +164,14 @@ plots its dual tiling given by PlotDualTiling. The parameters
 n,...,length correspond to those of PlotGrid, the parameters 
 showlines,...,ptsize correspond to those of PlotDualTiling. "
 
+PlotSlice::usage = 
+"PlotSlice[tiling,linenum,vectornum,showlines,showpoints,linewidth,ptsize]
+shows a slice of the tiling, specified by the Amman line with number linenum
+and the starvector defined by vectornum. The tiles corresponding to the 
+intersection points of this plane are plotted. If there are no defects,
+then there will be no overlapping tiles in any given slice.
+"
+
 (********************************************************************)
 (*                                                                  *)
 (*                   Unprotect exported functions                   *)
@@ -174,7 +182,8 @@ Unprotect[PlotGridVectors,
           PlotGrid,
           DualizeGrid,
           PlotDualTiling,
-          PlotGridDualTiling]
+          PlotGridDualTiling,
+		  PlotSlice]
 
 (********************************************************************)
 (*                                                                  *)
@@ -192,7 +201,8 @@ Clear[PlotGridVectors,
       PlotGrid,
       DualizeGrid,
       PlotDualTiling,
-      PlotGridDualTiling]
+      PlotGridDualTiling,
+	  PlotSlice]
   
 PlotGridVectors[tau_] :=
 Module[{thta0,thta1,rj},
@@ -285,7 +295,7 @@ Module[{tau,thta0,thta1,r,rx,rdt,
 			i,ki,gi,kmni,kmxi,
 			j,kj,gj,kmnj,kmxj,
 			k,kk,gk,kmnk,kmxk,tijk,
-			intersec,tiles={},tij,tilpoints,tillines={}},
+			intersec,tiles={},tij,tilpoints,tillines={},tilesijk={}},
 
 			tau         = (1+Sqrt[5])/2;
 			thta0       = ArcCos[1/(2tau-1)];(*should be arccos(1/sqrt5) for QC*)
@@ -369,6 +379,7 @@ Module[{tau,thta0,thta1,r,rx,rdt,
 						tijk[[i]] = ki;
 						tijk[[j]] = kj;
 						tijk[[k]] = kk;
+						AppendTo[tilesijk,{i,j,k}];
 						AppendTo[tiles,Map[cut,{tijk,tijk+step[i],tijk+step[j],tijk+step[k],
 											tijk+step[i]+step[j],
 											tijk+step[k]+step[i],
@@ -386,7 +397,7 @@ Module[{tau,thta0,thta1,r,rx,rdt,
 								{t[[4]],t[[7]]},{t[[6]],t[[8]]},{t[[7]],t[[8]]},{t[[1]],t[[4]]},{t[[2]],t[[6]]},{t[[3]],t[[7]]},{t[[5]],t[[8]]}}]
 								,{t,tiles}],1];
 			tillines  = Union[Map[Sort,tillines]];
-			{nj,tilpoints,tillines,tiles}]
+			{nj,tilpoints,tillines,tiles,tilesijk}]
 
 
 PlotDualTiling[til_,
@@ -455,6 +466,49 @@ Show[GraphicsColumn[{PlotGrid[n,kmin,kmax,gam,plotrange,length],
                      PlotDualTiling[DualizeGrid[n,kmin,kmax,gam]]}]]
 ];
 
+PlotSlice[til_,
+		lnum_,
+		vnum_,
+		showlines_:True,
+		showpoints_:False,
+		linewidth_:1/500,
+		ptsize_:1/100]:=
+Module[{rows,tnum={},tilpoints,tillines={},
+	n, tau, thta0,thta1,vectors,add,j,
+	plotlines,plotpoints},
+rows=Position[til[[5]],vnum][[All,1]];
+Do[
+If[til[[4,i,1,vnum]]==lnum,
+tnum=Append[tnum,i];]
+,{i,rows}
+];
+tilpoints = Union[Flatten[Part[til[[4]],tnum],1]];
+tillines  = Flatten[Table[Join[tillines,{{t[[1]],t[[2]]},{t[[1]],t[[3]]},{t[[2]],t[[5]]},{t[[3]],t[[5]]},{t[[4]],t[[6]]},
+						{t[[4]],t[[7]]},{t[[6]],t[[8]]},{t[[7]],t[[8]]},{t[[1]],t[[4]]},
+						{t[[2]],t[[6]]},{t[[3]],t[[7]]},{t[[5]],t[[8]]}}]
+								,{t,Part[til[[4]],tnum]}],1];
+tillines  = Union[Map[Sort,tillines]];
+n       = First[til];
+tau = (1+Sqrt[5])/2;
+thta0=ArcCos[1/(2tau-1)];(*should be arccos(1/sqrt5) for QC*)
+thta1=ArcCos[(tau-1)/2];(*should be 2Pi/5 for QC*)
+		vectors=Union[{{0,0,1}},Table[CoordinateTransform["Spherical"->"Cartesian",{1,thta0,x}],{x,{-2thta1,-thta1,0,thta1,2thta1}}]];
+	add[p_]:= Apply[Plus, p*vectors];
+	plotlines = 
+                 If[showlines,
+                    Map[Line,Map[add,tillines,{2}]],
+                    {}];
+	plotpoints = 
+                 If[showpoints,
+                    Map[Point,Map[add,tilpoints]],
+                    {}];
+Show[Graphics3D[Join[{Thickness[linewidth]},
+                          plotlines,
+                          {PointSize[ptsize]},
+                          plotpoints]],
+            ViewPoint->{1.3,-2.4,2.0}*1000000,
+			ImageSize->{700,700}]];
+
 
 (********************************************************************)
 (*                                                                  *)
@@ -474,7 +528,8 @@ Protect[PlotGridVectors,
         PlotGrid,
         DualizeGrid,
         PlotDualTiling,
-        PlotGridDualTiling]
+        PlotGridDualTiling,
+		PlotSlice]
 
 (********************************************************************)
 (*                                                                  *)
