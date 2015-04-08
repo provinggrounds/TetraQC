@@ -56,6 +56,14 @@ TransformRhombs::usage=
 "TransformRhombs[listT,listR,rhomb]
 "
 
+Combine::usage=
+"
+"
+
+CreateMasterList::usage=
+"
+"
+
 (********************************************************************)
 (*                                                                  *)
 (*                   Unprotect exported functions                   *)
@@ -70,7 +78,10 @@ Unprotect[MakeLines,
 			CombineDecorations,
 			ShowRhomb,
 			TransformRhomb,
-			TransformRhombs]
+			TransformRhombs,
+			Combine,
+			CreateMasterList,
+			PrintLengths]
 
 (********************************************************************)
 (*                                                                  *)
@@ -92,13 +103,18 @@ Clear[MakeLines,
 		CombineDecorations,
 		ShowRhomb,
 		TransformRhomb,
-		TransformRhombs]
+		TransformRhombs,
+		Combine,
+		CreateMasterList,
+		PrintLengths]
 
 Needs["TetGenLink`"]
 
 $filenameoblate = "oblate-decoration.csv"
 $filenameprolate = "prolate-decoration.csv"
-$filenamedecoratedrhombs = "rhombs-decoration-j.csv";
+$filenamedecoratedrhombs = "rhombs-decoration-j.csv"
+$tol=10^-6
+$round=10^-9
   
 MakeLines[list_]:=
 Module[{Edges={}},
@@ -173,6 +189,92 @@ Module[{n,combinedtiles={}},
 	combinedtiles
 ]
 
+CreateMasterList[decoratedtiles_]:=
+Module[{n,dectiles,counter=0,i,masterlist={}},
+
+		n=Length[decoratedtiles];
+
+		dectiles=decoratedtiles;
+		
+		(*combines all subgraphs into one largest list*)
+		(*increments the indices accordingly*)
+		
+		Do[
+			dectiles[[i,All,1]]=Plus[dectiles[[i,All,1]],counter];
+			dectiles[[i,All,3]]=Plus[dectiles[[i,All,3]],counter];
+			counter=counter+Length[dectiles[[i]]];
+			masterlist=Join[masterlist,dectiles[[i]]];,
+		{i,n}];
+
+		masterlist=Chop[masterlist];
+		masterlist=Round[masterlist,$round];
+
+		(*masterlist=SortBy[SortBy[SortBy[masterlist,#[[2,3]]&],#[[2,2]]&],#[[2,1]]&];*)
+		masterlist=SortBy[masterlist,#[[2]]&];
+
+		masterlist=N[masterlist];
+		Print[Length[Union[masterlist[[All,2]]]]];
+
+		Print["finished master list"];
+
+	masterlist
+]
+
+Combine[decoratedtiles_]:=
+Module[{n,counter=0,i,masterlist={},newlist={},keys,vals,dectiles,CheckEqual,
+		coords,neighbors,assoc},
+
+		n=Length[decoratedtiles];
+
+		dectiles=decoratedtiles;
+		
+		masterlist=CreateMasterList[decoratedtiles];		
+
+		n=Length[masterlist];
+
+		CheckEqual[r1_,r2_]:=
+			If[Norm[r1-r2]<$tol,
+				Return[True];,
+				Return[False];
+			];
+
+		(*identifies unique nodes, ASSUMING degeneracies are neighboring...*)
+		(*this assumption relies on algorithm of Sort[] to work properly*)
+
+		counter=1;
+		assoc = Association[masterlist[[1,1]]->1];
+		coords={masterlist[[1,2]]};
+		neighbors={masterlist[[1,3]]};
+
+		Do[
+			If[Mod[i,5000]==0,Print["merging ", i, " of ", n];];
+			If[CheckEqual[masterlist[[i-1,2]],masterlist[[i,2]]],
+					neighbors[[counter]] = Join[neighbors[[counter]],masterlist[[i,3]]];,
+				counter=counter+1;
+				AppendTo[coords,masterlist[[i,2]]];
+				AppendTo[neighbors,masterlist[[i,3]]];
+			];
+			AppendTo[assoc,masterlist[[i,1]]->counter];
+			,
+		{i,2,n,1}];
+
+	neighbors=neighbors/.assoc;
+	neighbors=Table[Union[x],{x,neighbors}];
+	{coords,neighbors}
+
+]
+
+PrintLengths[decgraph_]:=
+Module[{Lengths,curcount,n},
+		Lengths=Table[Length[x],{x,decgraph[[2]]}];
+		n=Length[Lengths];
+		Do[
+			curcount=Length[Position[Lengths,i]];
+			Print["# vertices with ", i, " neighbor(s) = ", curcount, " (", N[curcount/n]*100,"%)"];,
+		{i,Union[Lengths]}
+		]
+]
+
 
 ReadOblate[]:= ToExpression[Import[$filenameoblate,"CSV"]]
 
@@ -240,7 +342,10 @@ Protect[MakeLines,
 		CombineDecorations,
 		ShowRhomb,
 		TransformRhomb,
-		TransformRhombs]
+		TransformRhombs,
+		Combine,
+		CreateMasterList,
+		PrintLengths]
 
 (********************************************************************)
 (*                                                                  *)
