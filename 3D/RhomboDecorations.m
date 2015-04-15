@@ -64,6 +64,26 @@ CreateMasterList::usage=
 "
 "
 
+DecorateGrid::usage =
+"DecorateGrid[til_,decorations_]
+"
+
+GenerateRotatedTile::usage =
+"GenerateRotatedTile[triple]
+"
+
+GenerateRotatedTiles::usage =
+"GenerateRotatedTiles[triples]
+"
+
+GetTriples::usage =
+"GetTriples[]
+"
+
+PlotTiles::usage =
+"PlotTile[tiles]
+"
+
 (********************************************************************)
 (*                                                                  *)
 (*                   Unprotect exported functions                   *)
@@ -81,7 +101,12 @@ Unprotect[MakeLines,
 			TransformRhombs,
 			Combine,
 			CreateMasterList,
-			PrintLengths]
+			PrintLengths,
+			DecorateGrid,
+			GenerateRotatedTile,
+			GenerateRotatedTiles,
+			GetTriples,
+			PlotRotatedTiles]
 
 (********************************************************************)
 (*                                                                  *)
@@ -106,7 +131,17 @@ Clear[MakeLines,
 		TransformRhombs,
 		Combine,
 		CreateMasterList,
-		PrintLengths]
+		PrintLengths,
+		DecorateGrid,
+		GenerateRotatedTile,
+		GenerateRotatedTiles,
+		GetTriples,
+		PlotRotatedTiles,
+		DecorateGrid,
+		GenerateRotatedTile,
+		GenerateRotatedTiles,
+		GetTriples,
+		PlotRotatedTiles]
 
 Needs["TetGenLink`"]
 
@@ -115,6 +150,15 @@ $filenameprolate = "prolate-decoration.csv"
 $filenamedecoratedrhombs = "rhombs-decoration-j.csv"
 $tol=10^-6
 $round=10^-9
+$triples = Select[Tuples@{Range[6],Range[6],Range[6]},Less@@#&];
+
+$tau = (1+Sqrt[5])/2;
+$thta0 = ArcCos[1/(2$tau-1)];(* = ArcCos[1/Sqrt[5]] for QC*)
+$thta1 = ArcCos[($tau-1)/2];(* = 2Pi/5 for QC*)
+$r = Union[{{0,0,1}},
+				Table[CoordinateTransform["Spherical"->"Cartesian",{1,$thta0,x}],
+				{x,{-2$thta1,-$thta1,0,$thta1,2$thta1}}]];
+
   
 MakeLines[list_]:=
 Module[{Edges={}},
@@ -319,6 +363,124 @@ Module[{n,T,R,type,i,rhombs={}},
 	rhombs
 ]
 
+DecorateGrid[til_,decorations_]:=
+Module[{decoratedtiles,t,add,tripleindex,n,decorationj,T},
+
+			n = Length[til[[5]]];
+
+			add[p_]    := Apply[Plus, p*$r];
+
+			decoratedtiles = Table[tripleindex = Flatten[Position[$triples,til[[5,i]]]][[1]];
+									decorationj=Part[decorations,tripleindex];
+									T=add[til[[4,i,1]]];
+									decorationj[[All,2]] = Table[T+x,{x,decorationj[[All,2]]}];
+									decorationj,
+								{i,n}];
+		decoratedtiles
+]
+
+GenerateRotatedTile[triple_]:=
+Module[{u,e1,e2,e3,e4,s,c,v,volume,voloblate,volprolate,type,
+		t12,t13,t23,T={0,0,0},R1,R2,R3,R2theta,tile,curVertices,vol,n,thta,t,
+		pr1={0,0,1},newtile={},i,curStart,curEnd,SkewMatrix,GetTile,AxisAngleMatrix},
+		
+			Print[triple];
+
+			e1=$r[[triple[[1]]]];
+			e2=$r[[triple[[2]]]];
+			e3=$r[[triple[[3]]]];
+
+			volume = FullSimplify[Norm[e1.Cross[e2,e3]]];
+			voloblate = 1/5 Sqrt[10-2 Sqrt[5]];
+			volprolate= 1/5 Sqrt[2 (5+Sqrt[5])];
+
+			If[volume==voloblate,
+				type="Oblate";,
+				If[volume==volprolate,
+					type="Prolate";,type="Unknown";
+				];
+			];
+
+			SkewMatrix[v_]:=
+			Module[{v1=v[[1]],v2=v[[2]],v3=v[[3]]},
+					{{0,-v3,v2},
+					{v3,0,-v1},
+					{-v2,v1,0}}];
+
+			AxisAngleMatrix[n_,thta_]:=
+			Module[{x=n[[1]],y=n[[2]],z=n[[3]],c1=Cos[thta],s1=Sin[thta],c2=1-Cos[thta]},
+					{{x x c2, x y c2- z s1, x z c2+ y s1},
+					{y x c2+ z s1, y y c2, y z c2- x s1},
+					{z x c2- y s1, z y c2+ x s, z z c2}}+c1*IdentityMatrix[3]];
+
+			curVertices={{0,0,0},e1,e2,e3,e1+e2,e3+e1,e2+e3,e1+e2+e3};
+
+			GetTile[t_]:=
+				{{t[[1]],t[[2]]},{t[[1]],t[[3]]},{t[[2]],t[[5]]},{t[[3]],t[[5]]},{t[[4]],t[[6]]},
+				{t[[4]],t[[7]]},{t[[6]],t[[8]]},{t[[7]],t[[8]]},{t[[1]],t[[4]]},{t[[2]],t[[6]]},{t[[3]],t[[7]]},{t[[5]],t[[8]]}};
+
+			tile  = Apply[GetTile,{curVertices}];
+
+			t12=e1.e2;t13=e1.e3;t23=e2.e3;
+			If[t12<0&&t13<0,T=-e1;e1=-e1;];
+			If[t12<0&&t23<0,T=-e2;e2=-e2;];
+			If[t13<0&&t23<0,T=-e3;e3=-e3;];
+			If[t12>0&&t23>0,e4=e1;e1=e2;e2=e4;];
+			If[t13>0&&t23>0,e4=e1;e1=e3;e3=e4;];
+
+			If[e1.pr1==1,
+				R1=IdentityMatrix[3];,
+				v=SkewMatrix[Cross[e1,pr1]
+			];
+
+			s=Norm[v];
+			c=e1.pr1;
+			R1=IdentityMatrix[3]+v+v.v(1-c)/s^2];
+
+			If[Cross[e2,e3].e1>0,u=R1.e2,u=R1.e3];
+
+			If[u[[1]]==0,
+				If[u[[2]]<0,
+					R2theta=Pi/4;
+					R2theta=-Pi/4;
+				];,
+				If[u[[1]]<0,
+					R2theta=-ArcTan[u[[2]]/u[[1]]] + Pi;,
+					R2theta=-ArcTan[u[[2]]/u[[1]]];
+				];
+			];
+
+			R2=AxisAngleMatrix[pr1,R2theta];
+
+			R3=R2.R1;
+
+			For[i=1,i<=Length[tile],i++,
+				curStart=R3.(T+tile[[i,1]]);
+				curEnd=R3.(T+tile[[i,2]]);
+				newtile=Append[newtile,{curStart,curEnd}];
+			];
+
+	{T,R3,tile,newtile,type}
+]
+
+GenerateRotatedTiles[triples_]:=
+	Table[Flatten[Map[GenerateRotatedTile,{t}],1],{t,triples}]
+
+GetTriples[]:=$triples
+
+PlotRotatedTiles[tiles_]:=
+Module[{oldtiles,newtiles},
+		oldtiles = tiles[[All,4]];
+		newtiles = tiles[[All,5]];
+
+		Show[Table[Graphics3D[Join[{Black,Map[Line,t]}]],{t,oldtiles}],
+			Table[Graphics3D[Join[{Blue,Map[Line,t]}]],{t,newtiles}],
+			Graphics3D[Arrow[{{0,0,0},#}]&/@{{1,0,0},{0,1,0},{0,0,2}}, Axes->True],
+			Graphics3D[Arrow[{{0,0,0},#}]&/@$r, Axes->True],
+		ViewPoint->{5,-1,2}*1000000,
+		ImageSize->{700,700}]
+]
+
 
 (********************************************************************)
 (*                                                                  *)
@@ -349,7 +511,7 @@ Protect[MakeLines,
 
 (********************************************************************)
 (*                                                                  *)
-(*        End of package "AperiodicTilings`GridMethod`"             *)
+(*        End of package "Rhombohedra`oblateprolate`"               *)
 (*                                                                  *)
 (********************************************************************)
 
